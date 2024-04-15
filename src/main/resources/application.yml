@@ -33,14 +33,14 @@ spring:
       client:
         registration:
           facebook:
-            client-id: 407738975023941
-            client-secret: ceaa03f74aa3b123c385985a7b07b3e4
+            client-id: 
+            client-secret: 
             scope:
               - email
               - public_profile
           google:
-            client-id: 679199896862-9pv1qrnp1nfedf1hgisk8qknqnkvcrus.apps.googleusercontent.com
-            client-secret: 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
+            client-id:
+            client-secret: 
   thymeleaf:
      prefix: classpath:/templates/
      suffix: .html
