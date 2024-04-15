@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org" th:replace="~{/user/index :: areas(~{::main})}">
+<main ng-app="app" ng-controller="ctrl">
+	<section class="hero-section d-flex justify-content-center align-items-center">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6 col-12 mx-auto">
+				<th:if test="${not empty currentUser}">
+					<form class="custom-form"  action="../user/updateUser" method="post" th:object="${profile}">
+						<h2 class="hero-title text-center mb-4 pb-2">
+							User Information
+						</h2>
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-12">
+								<div class="form-floating">
+									<li style="color: white;">User Name: <input class="form-control" type="text"  th:field="*{username}" readonly required></li>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-12">
+								<div class="form-floating">
+									<li style="color: white;">Last Name: <input class="form-control" type="text" th:field="*{lastname}" required></li>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-12">
+								<div class="form-floating">
+									<li style="color: white;">First Name: <input class="form-control" type="text" th:field="*{firstname}" >
+								</div>
+							</div>
+							<div class="col-lg-12 col-md-12 col-12">
+								<div class="form-floating">
+									<li style="color: white;">Email: <input class="form-control"   th:field="*{email}"></li>
+								</div>
+							</div>
+							<div class="col-lg-12 col-md-12 col-12">
+								<div class="form-floating">
+									<li style="color: white;">Phone: <input class="form-control"  th:field="*{phone}"></li>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-12">
+								<div class="form-floating">
+									<li style="color: white;">Gender:
+										<select class="form-control" th:field="*{gender}">
+											<option th:value="male">Male</option>
+											<option th:value="female">Female</option>
+											<option th:value="other">Other</option>
+										</select>
+									</li>
+								</div>
+							</div>
+						</div>
+						
+						<div class="row justify-content-center align-items-center">
+								<div class="col-lg-4 col-md-4 col-4 ms-auto">
+									<input class="form-control" type="submit" value="updateUser">
+								</div>
+								<div class="col-lg-4 col-md-4 col-4">
+									<input class="form-control" formaction="../user/changePass" type="submit" value="changePass">
+								</div>
+							</div>
+							
+		
+					</form>
+		
+		
+		
+					<!--<p>
+										<a href="${pageContext.request.contextPath}/logout.html">Logout</a>
+									</p>-->
+				</th:if>
+			<!--<th:if test="${empty currentUser}">
+							<p>Please log in to view user information.</p>
+							 Có thể thêm liên kết đến trang đăng nhập ở đây nếu cần 
+						</th:if>-->
+			</div>
+		</div>
+	</div>
+	</section>
+</main>
+
+</html>

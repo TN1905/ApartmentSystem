@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org" th:replace="~{/user/index :: areas(~{::main})}">
+<main>
+
+
+	<section class="hero-section d-flex justify-content-center align-items-center">
+		<div class="container">
+			<div class="row">
+				<div>
+					<a class="btn btn-lg btn-secondary fab fa-google"
+						href="/login/google">[(#{lo.a.continuewithgoogle})]</a>
+				</div>
+				<div>
+					<a class="btn btn-lg btn-secondary fab fa-facebook"
+						href="/login/facebook">[(#{lo.a.continuewithfacebook})]</a>
+				</div>
+				<div class="col-lg-6 col-12 mx-auto">
+					<form action="../user/signup" method="post" th:action="@{/user/signup}" th:object="${account}"
+						class="custom-form" role="form">
+						<h2 class="hero-title text-center mb-4 pb-2">
+							[[#{lo.a.signup}]]
+						</h2>
+						<div class="alert alert-danger" th:if="${messageRegister}" th:text="${messageRegister}"></div>
+						<div class="row">
+							<div class="col-lg-6 col-md-6 col-12">
+								<div class="form-floating">
+									<input type="text" th:field="*{firstname}" id="first-name" class="form-control" />
+									<label for="floatingInput" th:utext="#{lo.a.firstname}"></label>
+									<p class="text-info" th:if="${#fields.hasErrors('firstname')}"
+										th:errors="*{firstname}"></p>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-12">
+								<div class="form-floating">
+									<input type="text" th:field="*{lastname}" id="last-name" class="form-control" />
+									<label for="floatingInput" th:utext="#{lo.a.lastname}"></label>
+									<p class="text-info" th:if="${#fields.hasErrors('lastname')}"
+										th:errors="*{lastname}"></p>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-12">
+								<div class="form-floating mb-4 p-0">
+									<input type="text" th:field="*{email}" id="email" class="form-control" />
+									<label for="email" th:utext="#{lo.a.emailaddress}"></label>
+									<p class="text-info" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></p>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-12">
+								<div class="form-floating">
+									<input type="text" th:field="*{phone}" id="phone-number" class="form-control" />
+									<label for="floatingInput" th:utext="#{lo.a.phonenumber}"></label>
+									<p class="text-info" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></p>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-12">
+								<div class="form-floating">
+									<select th:field="*{gender}" id="gender" class="form-control">
+										<option th:value="male" th:text="#{lo.a.male}"></option>
+										<option th:value="female" th:text="#{lo.a.female}"></option>
+										<option th:value="other" th:text="#{lo.a.other}"></option>
+									</select>
+									<label for="gender" th:utext="#{lo.a.gender}"></label>
+									<p class="text-info" th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}">
+									</p>
+								</div>
+							</div>
+							<div class="col-lg-12 col-12">
+								<div class="form-floating p-0">
+									<input type="text" th:field="*{username}" id="username" class="form-control" />
+									<label for="password" th:utext="#{lo.a.username}"></label>
+									<p class="text-info" th:if="${#fields.hasErrors('username')}"
+										th:errors="*{username}"></p>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-12">
+								<div class="form-floating">
+									<input type="password" th:field="*{password}" id="password" class="form-control" />
+									<label for="floatingInput" th:utext="#{lo.a.password}"></label>
+									<p class="text-info" th:if="${#fields.hasErrors('password')}"
+										th:errors="*{password}"></p>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-6 col-12">
+								<div class="form-floating">
+									<input type="password" name="confirmPass" id="confirmPass" class="form-control" />
+									<label for="floatingInput" th:utext="#{lo.a.confirmpass}"></label>
+								</div>
+							</div>
+							<div class="col-lg-12 col-12">
+								<div class="form-check mb-4">
+									<div class="g-recaptcha" data-sitekey="6LeLiE8pAAAAAF44OGTpyX1izlUopQDxhss3I2_V">
+									</div>
+								</div>
+							</div>
+							<div class="row justify-content-center align-items-center">
+								<div class="col-lg-5 col-md-5 col-5 ms-auto">
+									<button type="submit" class="form-control">[[#{lo.a.submit}]]</button>
+								</div>
+								<div class="col-lg-6 col-md-6 col-7">
+									<p class="mb-0">
+										[[#{lo.a.ifualrea}]]
+										<a href="/user/login" class="ms-2">[[#{lo.a.signin}]]</a>
+									</p>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+	</section>
+</main>
+
+</html>

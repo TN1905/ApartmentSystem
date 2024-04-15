@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org" th:replace="~{/user/index :: areas(~{::main})}">
+<main ng-app="app" ng-controller="ctrl">
+	<section class="hero-section d-flex justify-content-center align-items-center">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6 col-12 mx-auto">
+				<th:if test="${not empty currentUser}">
+					<form class="custom-form"  action="../user/updatePass" method="post" th:object="${acc}">
+						<h2 class="hero-title text-center mb-4 pb-2">
+							Change Pass
+						</h2>
+						<div class="alert">
+							<div class="alert alert-danger" th:if="${messagechange}" th:text="${messagechange}"></div>
+						</div>
+						<div class="row">
+							<div class="col-lg-12 col-md-12 col-12">
+								<div class="form-floating">
+									<li style="color: white;">Old Password: <input class="form-control" type="password" name="oldpass"  required>
+								</div>
+							</div>
+							<div class="col-lg-12 col-md-12 col-12">
+								<div class="form-floating">
+									<li style="color: white;">New Password: <input class="form-control" type="password" th:field="*{password}" required>
+								</div>
+								<p class="text-info" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+							</div>
+							<div class="col-lg-12 col-md-12 col-12">
+								<div class="form-floating">
+									<li style="color: white;">Confirm Password: <input class="form-control" type="password" name="confirmPass" required>
+								</div>
+							</div>
+						</div>	
+						<div class="row justify-content-center align-items-center">
+								<div class="col-lg-4 col-md-4 col-4 ms-auto">
+									<input class="form-control" type="submit" value="Change Pass">
+								</div>
+							</div>
+		
+					</form>
+		
+		
+		
+					<!--<p>
+										<a href="${pageContext.request.contextPath}/logout.html">Logout</a>
+									</p>-->
+				</th:if>
+			<!--<th:if test="${empty currentUser}">
+							<p>Please log in to view user information.</p>
+							 Có thể thêm liên kết đến trang đăng nhập ở đây nếu cần 
+						</th:if>-->
+			</div>
+		</div>
+	</div>
+	</section>
+</main>
+
+</html>

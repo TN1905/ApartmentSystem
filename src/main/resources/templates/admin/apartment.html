@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<!-- Favicons -->
+	<link th:href="@{/assets/img/favicon.png}" rel="icon">
+	<link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+	<!-- Google Fonts -->
+	<link href="https://fonts.gstatic.com" rel="preconnect">
+	<link
+		th:href="@{https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}"
+		rel="stylesheet">
+
+	<!-- Vendor CSS Files -->
+	<link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+	<link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+	<link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+
+	<!-- Template Main CSS File -->
+	<link th:href="@{/assets/css/style.css}" rel="stylesheet">
+</head>
+
+<body>
+	<!-- Header -->
+	<header id="header" class="header fixed-top d-flex align-items-center">
+		<div class="d-flex align-items-center justify-content-between">
+			<a href="#" class="logo d-flex align-items-center">
+				<img th:src="@{/assets/img/logo.png}" alt="">
+				<span class="d-none d-lg-block">Admin</span>
+			</a>
+			<i class="bi bi-list toggle-sidebar-btn"></i>
+		</div>
+
+		<div class="search-bar">
+			<form class="search-form d-flex align-items-center" method="POST" action="#">
+				<input type="text" name="query" placeholder="Search" title="Enter search keyword">
+				<button type="submit" title="Search"><i class="bi bi-search"></i></button>
+			</form>
+		</div>
+
+		<nav class="header-nav ms-auto">
+			<ul class="d-flex align-items-center">
+				<li class="nav-item d-block d-lg-none">
+					<a class="nav-link nav-icon search-bar-toggle " href="#">
+						<i class="bi bi-search"></i>
+					</a>
+				</li>
+
+				<li class="nav-item dropdown pe-3">
+					<a class="nav-link nav-profile d-flex align-items-center pe-0" href="#" data-bs-toggle="dropdown">
+						<img th:src="@{/assets/img/profile-img.jpg}" alt="Profile" class="rounded-circle">
+						<span class="d-none d-md-block dropdown-toggle ps-2">K. Anderson</span>
+					</a>
+				</li>
+			</ul>
+		</nav>
+	</header><!-- End Header -->
+
+	<!-- Sidebar -->
+	<aside id="sidebar" class="sidebar">
+		<ul class="sidebar-nav" id="sidebar-nav">
+			<li class="nav-item">
+				<a class="nav-link collapsed" th:href="@{/admin/apartment}">
+					<i class="bi bi-grid"></i>
+					<span>Apartment</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link collapsed" th:href="@{/admin/apartmentType}">
+					<i class="bi bi-journal-text"></i>
+					<span>ApartType</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link collapsed" th:href="@{/admin/revenue}">
+					<i class="bi bi-layout-text-window-reverse"></i>
+					<span>Revenue</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link collapsed" th:href="@{/admin/rented}">
+					<i class="bi bi-envelope"></i>
+					<span>Rented</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link collapsed" th:href="@{/admin/apartStatus}">
+					<i class="bi bi-card-list"></i>
+					<span>Apart Status</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link collapsed" th:href="@{/admin/accountManagement}">
+					<i class="bi bi-person"></i>
+					<span>Account management</span>
+				</a>
+			</li>
+		</ul>
+	</aside><!-- End Sidebar -->
+
+	<!-- Main Content -->
+	<main id="main" class="main">
+		<div class="pagetitle">
+			<h1>Account management</h1>
+		</div><!-- End Page Title -->
+
+		<section class="section">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<h5 class="card-title">Edit account</h5>
+							<div class="alert alert-success" th:if="${not #strings.isEmpty(messageApartment)}" th:text="${messageApartment}"></div>
+							<!-- General Form Elements -->
+							<form action="/student/save" th:object="${apart}" enctype="multipart/form-data"
+								method="post">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="content">Apartment Content:</label>
+											<input type="text" id="content" name="content" class="form-control" th:field="*{content}"
+												 />
+											<p class="text-info" th:if="${#fields.hasErrors('content')}"
+												th:errors="*{content}"></p>
+										</div> <br>
+										<div class="form-group">
+											<label for="apartmentType">Apartment Type:</label>
+											<select id="apartmentType" name="apartmentType" class="form-control"
+												th:field="*{apartmentType}">
+												<!-- Options for apartment types -->
+												<option value="" disabled selected>Choose apartment type</option>
+												<option th:each="type : ${apartType}" th:value="${type.id}"
+													th:text="${type.name}"></option>
+											</select>
+											<p class="text-info" th:if="${#fields.hasErrors('apartmentType')}"
+												th:errors="*{apartmentType}"></p>
+										</div><br>
+										<div class="form-group">
+											<label for="price">Apartment Price:</label>
+											<input type="text" id="price" name="price" class="form-control"
+												th:field="*{price}" />
+											<p class="text-info" th:if="${#fields.hasErrors('price')}"
+												th:errors="*{price}"></p>
+										</div><br>
+										<div class="form-group">
+											<label for="acreage">Apartment Acreage:</label>
+											<input type="text" id="acreage" name="acreage" class="form-control"
+												th:field="*{acreage}" />
+											<p class="text-info" th:if="${#fields.hasErrors('acreage')}"
+												th:errors="*{acreage}"></p>
+										</div><br>
+										<div class="form-group">
+											<label for="apartImageTitleInput">Apartment Image:</label>
+										
+											<input type="file" id="apartImageTitleInput" name="apartImageTitle" 
+												class="form-control" 
+												onchange="updatePreview('apartImageTitleInput', 'apartImageTitlePreview')" />
+											<img id="apartImageTitlePreview" th:src="@{'/images/' + ${apartImageTitle}}"
+												alt="Image Preview" width="100"
+												class="img-thumbnail img-thumbnail-preview">
+										</div><br>
+										<div class="form-group">
+											<label for="">Apartment image1:</label> <img id="apartImageTitlePreview1"
+												th:src="@{'/images/' + ${apartImage1}}" alt="Image Preview" width="100"
+												class="img-thumbnail img-thumbnail-preview"> <input type="file"
+												id="apartImageTitleInput1" name="apartImage1" class="form-control"
+												onchange="updatePreview('apartImageTitleInput1', 'apartImageTitlePreview1')" />
+										</div><br>
+										<div class="form-group">
+											<label for="">Apartment image2:</label> <img id="apartImageTitlePreview2"
+												th:src="@{'/images/' + ${apartImage2}}" alt="Image Preview" width="100"
+												class="img-thumbnail img-thumbnail-preview"> <input type="file" 
+												id="apartImageTitleInput2" name="apartImage2" class="form-control" 
+												onchange="updatePreview('apartImageTitleInput2', 'apartImageTitlePreview2')" />
+										</div><br>
+										<!-- Other image inputs -->
+									</div>
+									<div class="col-md-6">
+										<div class="form-group">
+											<label for="apartImageTitleInput3">Apartment image3:</label>
+											<img id="apartImageTitlePreview3" th:src="@{'/images/' + ${apartImage3}}"
+												alt="Image Preview" width="100"
+												class="img-thumbnail img-thumbnail-preview">
+											<input type="file" id="apartImageTitleInput3" name="apartImage3" 
+												class="form-control"
+												onchange="updatePreview('apartImageTitleInput3', 'apartImageTitlePreview3')" />
+										</div><br>
+										<label for="province">Tỉnh/Thành phố:</label>
+										<select id="province" name="cityValue" onchange="loadDistricts()"
+											>
+											<option value="" selected disabled>Chọn tỉnh/thành phố</option>
+										</select><br><br>
+
+										<!-- Quận/Huyện -->
+										<label for="district">Quận/Huyện:</label>
+										<select id="district" name="districtValue" onchange="loadWards()"
+											>
+											<option value="" selected disabled>Chọn quận/huyện</option>
+										</select><br><br>
+
+										<!-- Phường/Xã -->
+										<label for="ward">Phường/Xã:</label>
+										<select id="ward" name="wardValue" >
+											<option value="" selected disabled>Chọn phường/xã</option>
+										</select><br><br>
+
+										<div class="form-group">
+											<label for="address">Apartment address:</label>
+											<input type="text" id="address" name="address" class="form-control"
+												th:field="*{address}" />
+											<p class="text-info" th:if="${#fields.hasErrors('address')}"
+												th:errors="*{address}"></p>
+										</div><br>
+
+										<div class="form-group">
+											<label for="description">Apartment Description:</label>
+											<textarea id="description" name="description" th:field="*{description}"
+												class="form-control"></textarea>
+											<p class="text-info" th:if="${#fields.hasErrors('description')}"
+												th:errors="*{description}"></p>
+										</div><br>
+
+										<div class="form-group">
+											<label for="status">Status:</label>
+											<div th:each="s : ${status}">
+												<input type="radio" id="status" name="status" th:value="${s.key}"
+													th:field="*{status}" />
+												<label th:for="${'status' + s.key}" th:text="${s.value}"></label>
+											</div>
+											<p class="text-info" th:if="${#fields.hasErrors('status')}"
+												th:errors="*{status}"></p>
+										</div>
+									</div>
+								</div>
+								<br>
+								<!-- Hidden inputs -->
+								<input type="hidden" id="hiddenProvince" name="city" value="${city}" th:field="*{city}"/>
+								<input type="hidden" id="" name="it"  th:value="${apartImageTitle}" />
+								<input type="hidden" id="" name="i1"  th:value="${apartImage1}" />
+								<input type="hidden" id="" name="i2"  th:value="${apartImage2}" />
+								<input type="hidden" id="" name="i3"  th:value="${apartImage3}" />
+								<input type="hidden" id="hiddenDistrict" name="district" value="${district}" th:field="*{district}"/>
+								<input type="hidden" id="hiddenWard" name="ward" value="${ward}" th:field="*{ward}"/>
+								<input type="hidden" id="hiddenId" name="id" th:field"*{id}" th:value="${id}" />
+								<!-- Form action buttons -->
+								<button class="btn btn-primary" type="submit"
+									formaction="/admin/createApartment">Save</button>
+								<button class="btn btn-secondary" type="submit"
+									formaction="/admin/updateApartment">Update</button>
+								<button class="btn btn-danger" type="submit"
+									formaction="/admin/deleteApartment">Delete</button>
+							</form>
+							<hr>
+							<!-- End
+                             <!-- Table of Account information -->
+							<div class="table-responsive">
+								<h5 class="card-title">Account information</h5>
+								<table class="table table-striped table-bordered">
+									<thead>
+										<tr>
+											<th>ID</th>
+											<th>Content</th>
+											<th>Type</th>
+											<th>Price</th>
+											<th>Acreage</th>
+											<th>Address</th>
+											<th>City</th>
+											<th>District</th>
+											<th>Ward</th>
+											<th>Description</th>
+											<th>Action</th>
+										</tr>
+									</thead>
+									<tbody>
+										<!-- Loop through apartmentList -->
+										<tr th:each="apartment : ${apartmentList}">
+											<td th:text="${apartment.id}"></td>
+											<td th:text="${apartment.content}"></td>
+											<td th:text="${apartment.apartmentType.name}"></td>
+											<td th:text="${apartment.price}"></td>
+											<td th:text="${apartment.acreage}"></td>
+											<td th:text="${apartment.address}"></td>
+											<td th:text="${apartment.city}"></td>
+											<td th:text="${apartment.district}"></td>
+											<td th:text="${apartment.ward}"></td>
+											<td th:text="${apartment.description}"></td>
+											<td>
+												<!-- Edit and Delete buttons -->
+												<a th:href="@{'/editApartment/' + ${apartment.id}}">Edit</a>
+												<a th:href="@{'/deleteApartment/' + ${apartment.id}}">Delete</a>
+											</td>
+										</tr><!-- End loop -->
+									</tbody>
+								</table>
+							</div><!-- End Table -->
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main><!-- End #main -->
+
+	<!-- Footer -->
+	<footer id="footer" class="footer">
+		<div class="copyright">
+			&copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+		</div>
+	</footer><!-- End Footer -->
+
+	<!-- Back to Top Button -->
+	<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+			class="bi bi-arrow-up-short"></i></a>
+
+	<!-- JavaScript Files -->
+	<script th:src="@{/assets/js/main.js}"></script>
+	<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js}"></script>
+
+
+</body>
+<script>
+	function populateDropdown(dropdownId, data) {
+		var dropdown = $("#" + dropdownId);
+		dropdown.empty();
+		dropdown.append('<option value="" selected disabled>Chọn ' + dropdownId
+			+ '</option>');
+		$.each(data, function (key, value) {
+			dropdown.append('<option value="' + value.Id + '">' + value.Name
+				+ '</option>');
+		});
+	}
+
+	function loadDistricts() {
+		console.log("City Value: " + $("#province").val());
+		var provinceId = $("#province").val();
+		if (provinceId) {
+			$
+				.getJSON(
+					'https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json?fbclid=IwAR0rFIXdhDePPDSI5SeQZarnl_UazlS2REGaXelLWT74AGV9DEpjHlXKGdY',
+					function (data) {
+						var selectedProvince = data.find(function (
+							province) {
+							return province.Id === provinceId;
+						});
+						if (selectedProvince) {
+							populateDropdown('district',
+								selectedProvince.Districts);
+							$("#ward").empty();
+							$("#hiddenProvince").val(
+								selectedProvince.Name);
+							$("#ward")
+								.change(
+									function () {
+										$("#hiddenWard")
+											.val(
+												$(
+													"#ward option:selected")
+													.text());
+									});
+						}
+					}).fail(function () {
+						console.error('Error loading districts.');
+					});
+		} else {
+			$("#district").empty();
+			$("#ward").empty();
+		}
+	}
+
+	function loadWards() {
+		console.log("City Value: " + $("#province").val());
+		console.log("District Value: " + $("#district").val());
+		var provinceId = $("#province").val();
+		var districtId = $("#district").val();
+		if (provinceId && districtId) {
+			$
+				.getJSON(
+					'https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json?fbclid=IwAR0rFIXdhDePPDSI5SeQZarnl_UazlS2REGaXelLWT74AGV9DEpjHlXKGdY',
+					function (data) {
+						var selectedProvince = data.find(function (
+							province) {
+							return province.Id === provinceId;
+						});
+						if (selectedProvince) {
+							var selectedDistrict = selectedProvince.Districts
+								.find(function (district) {
+									return district.Id === districtId;
+								});
+							if (selectedDistrict) {
+								populateDropdown('ward',
+									selectedDistrict.Wards);
+								$("#hiddenDistrict").val(
+									selectedDistrict.Name);
+
+							}
+						}
+					}).fail(function () {
+						console.error('Error loading wards.');
+					});
+		} else {
+			$("#ward").empty();
+			$("#hiddenWard").val("");
+
+		}
+	}
+
+	$
+		.getJSON(
+			'https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json?fbclid=IwAR0rFIXdhDePPDSI5SeQZarnl_UazlS2REGaXelLWT74AGV9DEpjHlXKGdY',
+			function (data) {
+				populateDropdown('province', data);
+			}).fail(function () {
+				console.error('Error loading provinces.');
+			});
+</script>
+
+<script>
+	function updatePreview(inputId, previewId) {
+		var input = document.getElementById(inputId);
+		var preview = document.getElementById(previewId);
+	
+		var file = input.files[0];
+		console.log(file);
+		if (file) {
+			var reader = new FileReader();
+
+			reader.onload = function (e) {
+				preview.src = e.target.result;
+			
+			};
+
+			reader.readAsDataURL(file);
+		}
+	
+	
+	
+}
+	
+
+</script>
+<script>
+	$(document)
+		.ready(
+			function () {
+				const cityValue = "[[${cityValue}]]";
+				const districtValue = "[[${districtValue}]]";
+				const wardValue = "[[${wardValue}]]";
+			
+				// Log giá trị để kiểm tra
+				console.log("City Value: " + cityValue);
+				console.log("District Value: " + districtValue);
+				console.log("Ward Value: " + wardValue);
+	
+
+				// Chọn giá trị cho dropdown tỉnh/thành phố
+				$("#province").prop('value', cityValue);
+
+				// Gọi hàm loadDistricts và điền dữ liệu trực tiếp từ server
+				$
+					.getJSON(
+						'https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json?fbclid=IwAR0rFIXdhDePPDSI5SeQZarnl_UazlS2REGaXelLWT74AGV9DEpjHlXKGdY',
+						function (data) {
+							populateDropdown('province', data);
+
+							// Điền dữ liệu cho dropdown quận/huyện và phường/xã từ server
+							var selectedProvince = data
+								.find(function (province) {
+									return province.Id === cityValue;
+								});
+							$("#province").prop('value',
+								cityValue);
+							if (selectedProvince) {
+								populateDropdown(
+									'district',
+									selectedProvince.Districts);
+								$("#hiddenProvince").val(
+									selectedProvince.Name);
+								$("#district").prop('value',
+									districtValue);
+
+								var selectedDistrict = selectedProvince.Districts
+									.find(function (district) {
+										return district.Id === districtValue;
+									});
+								if (selectedDistrict) {
+									populateDropdown(
+										'ward',
+										selectedDistrict.Wards);
+									$("#hiddenDistrict")
+										.val(
+											selectedDistrict.Name);
+									$("#ward").prop('value',
+										wardValue);
+								}
+							}
+						}).fail(function () {
+							console.error('Error loading provinces.');
+						});
+			});
+</script>
+
+</html>

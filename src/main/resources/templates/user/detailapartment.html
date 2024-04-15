@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org" th:replace="~{/user/index :: areas(~{::main})}">
+<main>
+	<div class="page-heading header-text">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<span class="breadcrumb"><a href="#">[(#{lo.a.home})]</a> / [(#{lo.a.singleproperty})]</span>
+					<h3>[(#{lo.a.singleproperty})]</h3>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="single-property section">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8">
+					<div class="main-image">
+						<img th:src="@{'../images/' + ${detailApartment.imagetitle}}" width="856" height="490" alt="">
+					</div>
+					<div class="main-content">
+						<span class="category" th:text="${detailApartment.apartmentType.name}"></span>
+						<h4>
+							<span th:text="${detailApartment.address}" /> ,
+							<span th:text="${detailApartment.ward}" /> ,
+							<span th:text="${detailApartment.district}" /> ,
+							<span th:text="${detailApartment.city}" />
+						</h4>
+						<p th:text="${detailApartment.description}"></p>
+					</div>
+					<div class="accordion" id="accordionExample">
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="headingOne">
+								<button class="accordion-button" type="button" data-bs-toggle="collapse"
+									data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+									[(#{lo.a.bestusefullink})]
+								</button>
+							</h2>
+							<div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+								data-bs-parent="#accordionExample">
+								<div class="accordion-body">
+									Dolor <strong>almesit amet</strong>, consectetur adipiscing elit, sed doesn't
+									eiusmod tempor kinfolk tonx seitan crucifix 3 wolf moon bicycle rights keffiyeh
+									snackwave wolf same vice, chillwave vexillologist incididunt ut labore consectetur
+									<code>adipiscing</code> elit, sed do eiusmod tempor incididunt ut labore et dolore
+									magna aliqua.
+								</div>
+							</div>
+						</div>
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="headingTwo">
+								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+									data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+									[(#{lo.a.howdoesitwork})]
+								</button>
+							</h2>
+							<div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+								data-bs-parent="#accordionExample">
+								<div class="accordion-body">
+									Dolor <strong>almesit amet</strong>, consectetur adipiscing elit, sed doesn't
+									eiusmod tempor kinfolk tonx seitan crucifix 3 wolf moon bicycle rights keffiyeh
+									snackwave wolf same vice, chillwave vexillologist incididunt ut labore consectetur
+									<code>adipiscing</code> elit, sed do eiusmod tempor incididunt ut labore et dolore
+									magna aliqua.
+								</div>
+							</div>
+						</div>
+						<div class="accordion-item">
+							<h2 class="accordion-header" id="headingThree">
+								<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+									data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+									[(#{lo.a.whyisvylla})]
+								</button>
+							</h2>
+							<div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+								data-bs-parent="#accordionExample">
+								<div class="accordion-body">
+									Dolor <strong>almesit amet</strong>, consectetur adipiscing elit, sed doesn't
+									eiusmod tempor kinfolk tonx seitan crucifix 3 wolf moon bicycle rights keffiyeh
+									snackwave wolf same vice, chillwave vexillologist incididunt ut labore consectetur
+									<code>adipiscing</code> elit, sed do eiusmod tempor incididunt ut labore et dolore
+									magna aliqua.
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-lg-4">
+					<div class="info-table">
+						<ul>
+							<li>
+								<img src="../images/info-icon-01.png" alt="" style="max-width: 52px;">
+								<h4 th:text="${detailApartment.acreage}"> m2<br><span>[(#{lo.a.totalflatspace})]</span></h4>
+							</li>
+							<li>
+								<img src="../images/info-icon-02.png" alt="" style="max-width: 52px;">
+								<h4 th:text="${#numbers.formatDecimal(detailApartment.price,0,'COMMA',2,'POINT')}">
+									
+									VNĐ<br><span>[(#{lo.a.price})]</span>
+								</h4>
+							</li>
+							<li>
+								<img src="../images/info-icon-03.png" alt="" style="max-width: 52px;">
+								<h4>[(#{lo.a.paymentprocess})]<br><span>[(#{lo.a.paymentprocess})]</span></h4>
+							</li>
+							<li>
+								<img src="../images/info-icon-04.png" alt="" style="max-width: 52px;">
+								<h4>[(#{lo.a.safety})]<br><span>24/7 [(#{lo.a.undercontrol})]</span></h4>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="section best-deal">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-4">
+					<div class="section-heading">
+						<h6>| [(#{lo.a.bestdeal})]</h6>
+						<h2>[(#{lo.a.findbestdeal})]</h2>
+					</div>
+				</div>
+				<div class="col-lg-12">
+					<div class="tabs-content">
+						<div class="row">
+							<div class="nav-wrapper ">
+								<ul class="nav nav-tabs" role="tablist">
+									<li class="nav-item" role="presentation">
+										<button class="nav-link active" id="appartment-tab" data-bs-toggle="tab"
+											data-bs-target="#appartment" type="button" role="tab"
+											aria-controls="appartment" aria-selected="true">[(#{lo.a.img})] 1</button>
+									</li>
+									<li class="nav-item" role="presentation">
+										<button class="nav-link" id="villa-tab" data-bs-toggle="tab"
+											data-bs-target="#villa" type="button" role="tab" aria-controls="villa"
+											aria-selected="false">[(#{lo.a.img})] 2</button>
+									</li>
+									<li class="nav-item" role="presentation">
+										<button class="nav-link" id="penthouse-tab" data-bs-toggle="tab"
+											data-bs-target="#penthouse" type="button" role="tab"
+											aria-controls="penthouse" aria-selected="false">[(#{lo.a.img})] 3</button>
+									</li>
+								</ul>
+							</div>
+							<div class="tab-content" id="myTabContent">
+								<div class="tab-pane fade show active" id="appartment" role="tabpanel"
+									aria-labelledby="appartment-tab">
+									<div class="row">
+										<div class="col-lg-3">
+											<div class="info-table">
+												<ul>
+													<li>[(#{lo.a.totalflatspace})] <span th:text="${detailApartment.acreage}">
+															m2</span></li>
+													<li>[(#{lo.a.price})] <span th:text="${#numbers.formatDecimal(detailApartment.price,0,'COMMA',2,'POINT')}">
+															 VNĐ
+														</span></li>
+													<li>[(#{lo.a.safety})] <span>[(#{lo.a.yes})]</span></li>
+													<li>[(#{lo.a.parkingavailable})] <span>[(#{lo.a.yes})]</span></li>
+													<li>[(#{lo.a.paymentprocess})] <span>[(#{lo.a.bank})]</span></li>
+												</ul>
+											</div>
+										</div>
+										<div class="col-lg-6">
+											<img th:src="@{'../images/' + ${detailApartment.image1}}" width="636" height="415"
+												alt="">
+										</div>
+										<div class="col-lg-3">
+											<h4>[(#{lo.a.apartmentinfo})]</h4>
+											<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, do eiusmod
+												tempor pack incididunt ut labore et dolore magna aliqua quised ipsum
+												suspendisse. <br><br>Swag fanny pack lyft blog twee. JOMO ethical copper
+												mug, succulents typewriter shaman DIY kitsch twee taiyaki fixie hella
+												venmo after messenger poutine next level humblebrag swag franzen.</p>
+											<div class="icon-button">
+												<a th:href="@{'/rentApartment/' + ${detailApartment.id}}"><i
+														class="fa fa-calendar"></i> [(#{lo.a.renthouse})]</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane fade" id="villa" role="tabpanel" aria-labelledby="villa-tab">
+									<div class="row">
+										<div class="col-lg-3">
+											<div class="info-table">
+												<ul>
+													<li>[(#{lo.a.totalflatspace})] <span th:text="${detailApartment.acreage}">
+															m2</span></li>
+													<li>[(#{lo.a.price})] <span th:text="${#numbers.formatDecimal(detailApartment.price,0,'COMMA',2,'POINT')}"> VNĐ</span></li>
+													<li>[(#{lo.a.safety})] <span>[(#{lo.a.yes})]</span></li>
+													<li>[(#{lo.a.parkingavailabley})] <span>[(#{lo.a.yes})]</span></li>
+													<li>[(#{lo.a.paymentprocess})] <span>[(#{lo.a.bank})]</span></li>
+												</ul>
+											</div>
+										</div>
+										<div class="col-lg-6">
+											<img th:src="@{'../images/' + ${detailApartment.image2}}" width="636" height="415"
+												alt="">
+										</div>
+										<div class="col-lg-3">
+											<h4>[(#{lo.a.whyisvylla})]</h4>
+											<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, do eiusmod
+												tempor pack incididunt ut labore et dolore magna aliqua quised ipsum
+												suspendisse. <br><br>Swag fanny pack lyft blog twee. JOMO ethical copper
+												mug, succulents typewriter shaman DIY kitsch twee taiyaki fixie hella
+												venmo after messenger poutine next level humblebrag swag franzen.</p>
+											<div class="icon-button">
+												<a th:href="@{'/rentApartment/' + ${detailApartment.id}}"><i
+														class="fa fa-calendar"></i> [(#{lo.a.renthouse})]</a>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="tab-pane fade" id="penthouse" role="tabpanel"
+									aria-labelledby="penthouse-tab">
+									<div class="row">
+										<div class="col-lg-3">
+											<div class="info-table">
+												<ul>
+													<li>[(#{lo.a.totalflatspace})] <span th:text="${detailApartment.acreage}">
+															m2</span></li>
+													<li>[(#{lo.a.price})] <span th:text="${#numbers.formatDecimal(detailApartment.price,0,'COMMA',2,'POINT')}"> VNĐ</span></li>
+													<li>[(#{lo.a.safety})] <span>[(#{lo.a.yes})]</span></li>
+													<li>[(#{lo.a.parkingavailable})] <span>[(#{lo.a.yes})]</span></li>
+													<li>[(#{lo.a.paymentprocess})] <span>[(#{lo.a.bank})]</span></li>
+												</ul>
+											</div>
+										</div>
+										<div class="col-lg-6">
+											<img th:src="@{'../images/' + ${detailApartment.image3}}" width="636" height="415"
+												alt="">
+										</div>
+										<div class="col-lg-3">
+											<h4>[(#{lo.a.apartmentinfo})]</h4>
+											<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, do eiusmod
+												tempor pack incididunt ut Kinfolk tonx seitan crucifix 3 wolf moon
+												bicycle rights keffiyeh snackwave wolf same vice, chillwave
+												vexillologistlabore et dolore magna aliqua quised ipsum suspendisse.
+												<br><br>Swag fanny pack lyft blog twee. JOMO ethical copper mug,
+												succulents typewriter shaman DIY kitsch twee taiyaki fixie hella venmo
+												after messenger poutine next level humblebrag swag franzen.</p>
+											<div class="icon-button">
+												<a th:href="@{'/rentApartment/' + ${detailApartment.id}}"><i
+														class="fa fa-calendar"></i> [(#{lo.a.renthouse})]</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</main>
+
+</html>
