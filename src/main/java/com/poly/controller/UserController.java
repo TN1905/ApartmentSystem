@@ -106,6 +106,14 @@ public class UserController {
 		
 	}
 	
+	@RequestMapping("/user/body")
+	public String body(Model model) {
+	
+
+		return "user/body2";
+		
+	}
+	
 	@RequestMapping("/user/logout")
 	public String logout(Model model) {
 		sessionService.set("currentUser", null);

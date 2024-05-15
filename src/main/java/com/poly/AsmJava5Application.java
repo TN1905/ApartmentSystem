@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import com.poly.dao.ApartmentDAO;
 import com.poly.entity.ApartmentMap;
 
-@SpringBootApplication
+@SpringBootApplication	
 @EnableMethodSecurity
 public class AsmJava5Application {
 	
