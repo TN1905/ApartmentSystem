@@ -109,7 +109,7 @@ public class UserController {
 	@RequestMapping("/user/body")
 	public String body(Model model) {
 	
-
+		System.out.println("lmm");
 		return "user/body2";
 		
 	}
