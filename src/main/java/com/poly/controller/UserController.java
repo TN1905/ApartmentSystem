@@ -608,8 +608,6 @@ public class UserController {
     
 	@RequestMapping("/user/listapartment1")
 	String apartment(){
-		//abc
-		//abc
 		return "user/listapartment2";
 	}
 	
