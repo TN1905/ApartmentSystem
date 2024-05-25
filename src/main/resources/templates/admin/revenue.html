@@ -107,37 +107,57 @@
 		</div><!-- End Page Title -->
 
 		<section class="section">
-    <div class="row">
-        <div class="col-md-12 grid-margin stretch-card">
-            <div class="card position-relative">
-                <div class="card-body">
-                    <h1>Revenue</h1>
-                    <form th:action="@{/admin/revenue/excel}" method="post">
-                        <button class="btn btn-primary" type="submit">Save Excel</button>
-                    </form>
-                    <table class="table" style="width: 100%">
-                        <thead>
-                            <tr>
-                                <th>Id</th>
-                                <th>Name</th>
-                                <th>Username</th>
-                                <th>Revenue</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="item : ${items}">
-                                <td th:text="${item.id}">Id</td>
-                                <td th:text="${item.name}">Name</td>
-                                <td th:text="${item.person}">Username</td>
-                                <td th:text="${item.sum}">Revenue</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <div class="row">
+                <div class="col-md-12 grid-margin stretch-card">
+                    <div class="card position-relative">
+                        <div class="card-body">
+                            <h1>Revenue</h1>
+                            <form th:action="@{/admin/revenue}" method="get">
+                                <div class="form-group row">
+                                    <label for="month" class="col-form-label col-auto">Select Month:</label>
+                                    <div class="col-2">
+                                        <select id="month" name="month" class="form-control form-control-sm">
+                                            <option th:each="month : ${#numbers.sequence(1,12)}" 
+                                                    th:value="${month}" 
+                                                    th:text="${month}" 
+                                                    th:selected="${month} == ${selectedMonth}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-auto">
+                                        <button class="btn btn-primary btn-sm" type="submit">Filter</button>
+                                    </div>
+                                </div>
+                            </form>
+                            
+                            <table class="table table-striped table-bordered" style="width: 100%">
+                                <thead>
+                                    <tr>
+                                        <th>Id</th>
+                                        <th>Name</th>
+                                        <th>Username</th>
+                                        <th>Month</th>
+                                        <th>Revenue</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="item : ${items}">
+                                        <td th:text="${item.id}">Id</td>
+                                        <td th:text="${item.name}">Name</td>
+                                        <td th:text="${item.person}">Username</td>
+                                        <td th:text="${item.month}">Month</td>
+                                        <td th:text="${#numbers.formatDecimal(item.sum, 0, 'COMMA', 0, 'POINT')}">Revenue</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <form th:action="@{/admin/revenue/excel}" method="post">
+                                <button class="btn btn-primary" type="submit">Save Excel</button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
+        </section>
 	</main><!-- End #main -->
 
 	<!-- ======= Footer ======= -->

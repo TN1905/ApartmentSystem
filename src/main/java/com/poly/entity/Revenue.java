@@ -18,4 +18,12 @@ public class Revenue {
 	String name;
 	String person;
 	Double sum;
+	Integer month;
+	 
+	public Revenue(String id, String name, String person, Double sum) {
+        this.id = id;
+        this.name = name;
+        this.person = person;
+        this.sum = sum;
+    } 
 }

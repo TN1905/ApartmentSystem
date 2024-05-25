@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.poly.dao.AccountDAO;
 import com.poly.dao.ApartTypeDAO;
@@ -86,11 +88,17 @@ public class AdminController {
 	}
 	
 	@RequestMapping("/admin/revenue")
-	public String revenue(Model model) {
-		List<Revenue> items = reportDao.getRevenue();
-		model.addAttribute("items",items);
-		return "admin/revenue";
-	}
+	public String revenue(Model model, @RequestParam(required = false) Integer month) {
+        List<Revenue> items = reportDao.getMonthlyRevenue();
+        if (month != null) {
+            items = items.stream()
+                    .filter(r -> r.getMonth().equals(month))
+                    .collect(Collectors.toList());
+        }
+        model.addAttribute("items", items);
+        model.addAttribute("selectedMonth", month);
+        return "admin/revenue";
+    }
 	
 	@RequestMapping("/admin/rented")
 	public String rented(Model model) {
