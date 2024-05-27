@@ -22,6 +22,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
 import jakarta.validation.constraints.Email;
@@ -86,9 +87,12 @@ public class Account implements Serializable{
     @JsonIgnore
     @OneToMany(mappedBy="account", fetch = FetchType.EAGER)
 	List<RentApartment> rentApartment;
-    
     @Enumerated(EnumType.STRING)
     private Provider provider;
+    
+    @JsonIgnore
+    @OneToOne(mappedBy="account",fetch=FetchType.EAGER)
+    Wallet wallet;
  
     public Provider getProvider() {
         return provider;

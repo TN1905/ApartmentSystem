@@ -56,8 +56,8 @@ public class RentController {
 	@RequestMapping("/rentApartment/{id}")
 	public String form(Model model,@PathVariable("id") String apartmentId) {
 		
-//		Account acc = sessionService.get("currentUser");
-		String API_URL1 = "http://localhost:8080/rest/accounts/1705562446065";
+		Account acc = sessionService.get("currentUser");
+		String API_URL1 = "http://localhost:8080/rest/accounts/" + acc.getId();
 		String API_URL = "http://localhost:8080/rest/apartments/" + apartmentId;
         ResponseEntity<Apartment> response = restTemplate.exchange(API_URL, HttpMethod.GET, null, 
             new ParameterizedTypeReference<Apartment>() {});
@@ -68,7 +68,7 @@ public class RentController {
         if (response.getStatusCode().is2xxSuccessful() && response1.getStatusCode().is2xxSuccessful()) {
             // Lấy danh sách căn hộ từ phản hồi
             Apartment apartment = response.getBody();
-            Account acc = response1.getBody();
+            acc = response1.getBody();
             model.addAttribute("apartment", apartment);
             model.addAttribute("account", acc);
             sessionService.set("accountPayment", acc);
@@ -122,7 +122,7 @@ public class RentController {
         rentApartmentDetail.setVnpTransactionStatus(vnpTransactionStatus);
         rentApartmentDao.save(rentApartment);
         rentApartmentDetailDao.save(rentApartmentDetail);
-        apartment.setStatus(false);
+     
         apartmentDao.save(apartment);
         model.addAttribute("paymentDetails",rentApartmentDetail);
         return "user/paymentsuccessForm";
@@ -164,7 +164,7 @@ public class RentController {
         rentApartmentDetail.setVnpTransactionStatus(resultCode);
         rentApartmentDao.save(rentApartment);
         rentApartmentDetailDao.save(rentApartmentDetail);
-        apartment.setStatus(false);
+ 
         apartmentDao.save(apartment);
         model.addAttribute("paymentDetails",rentApartmentDetail);
         return "user/paymentsuccessForm";

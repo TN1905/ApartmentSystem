@@ -1,11 +1,13 @@
 package com.poly.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -44,9 +46,6 @@ public class Apartment implements Serializable{
 	private String address;
 	private Double price;
 	private Double acreage;
-	private int cityValue;
-	private int districtValue;
-	private int wardValue;
 	private String imagetitle;
 	private String image1;
 	private String image2;
@@ -60,15 +59,20 @@ public class Apartment implements Serializable{
 	ApartType apartmentType;
 	@JsonIgnore
 	@OneToMany(mappedBy = "apartment")
-	List<RentApartmentDetail> rentApartmentDetail;
-	private Boolean status;
+	List<RentApartmentDetail> rentApartmentDetail;@JsonIgnore
+    @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL)
+    private List<ApartmentImage> images;
+	private String status;
 	
+	public void setImages(List<ApartmentImage> images) {
+	    this.images = images;
+	}
 	@Override
 	public String toString() {
 		return "Apartment [id=" + id + ", content=" + content + ", ward=" + ward + ", district=" + district + ", city="
 				+ city + ", address=" + address + ", price=" + price + ", acreage=" + acreage + ", cityValue="
-				+ cityValue + ", districtValue=" + districtValue + ", wardValue=" + wardValue + ", imagetitle="
-				+ imagetitle + ", image1=" + image1 + ", image2=" + image2 + ", image3=" + image3 + ", createdate="
+				 + ", districtValue="  + ", wardValue=" +  ", imagetitle="
+				+ ", createdate="
 				+ createdate + ", description=" + description
 				 + ", status=" + status + "]";
 	}

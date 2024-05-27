@@ -323,36 +323,36 @@ public class UserController {
 		
 	}
 	
-	@RequestMapping("/user/listapartment")
-	public String listapartment(@RequestParam("field") Optional<String> field,Model model,
-			@RequestParam("p") Optional<Integer> p) {
-
-		int pageNumber = p.orElse(0);
-        int pageSize = 6;
-        
-        // Xác định trường sắp xếp
-        Sort sort = Sort.by(Sort.Direction.DESC, field.orElse("price"));
-        
-        // Tạo đối tượng Pageable để truy vấn dữ liệu
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
-	
-        String API_URL = "http://localhost:8080/rest/apartments";
-        ResponseEntity<List<Apartment>> response = restTemplate.exchange(API_URL, HttpMethod.GET, null, 
-            new ParameterizedTypeReference<List<Apartment>>() {});
-        
-        // Kiểm tra xem phản hồi có thành công không
-        if (response.getStatusCode().is2xxSuccessful()) {
-            // Lấy danh sách căn hộ từ phản hồi
-            List<Apartment> apartmentList = response.getBody();
-            model.addAttribute("listApartment", apartmentList);
-            System.out.println(apartmentList);
-        } else {
-            System.out.println("Không thể lấy dữ liệu từ API.");
-        }
-        
-        // Trả về view
-        return "user/listapartment";
-	}
+//	@RequestMapping("/user/listapartment")
+//	public String listapartment(@RequestParam("field") Optional<String> field,Model model,
+//			@RequestParam("p") Optional<Integer> p) {
+//
+//		int pageNumber = p.orElse(0);
+//        int pageSize = 6;
+//        
+//        // Xác định trường sắp xếp
+//        Sort sort = Sort.by(Sort.Direction.DESC, field.orElse("price"));
+//        
+//        // Tạo đối tượng Pageable để truy vấn dữ liệu
+//        Pageable pageable = PageRequest.of(pageNumber, pageSize, sort);
+//	
+//        String API_URL = "http://localhost:8080/rest/apartments";
+//        ResponseEntity<List<Apartment>> response = restTemplate.exchange(API_URL, HttpMethod.GET, null, 
+//            new ParameterizedTypeReference<List<Apartment>>() {});
+//        
+//        // Kiểm tra xem phản hồi có thành công không
+//        if (response.getStatusCode().is2xxSuccessful()) {
+//            // Lấy danh sách căn hộ từ phản hồi
+//            List<Apartment> apartmentList = response.getBody();
+//            model.addAttribute("listApartment", apartmentList);
+//            System.out.println(apartmentList);
+//        } else {
+//            System.out.println("Không thể lấy dữ liệu từ API.");
+//        }
+//        
+//        // Trả về view
+//        return "user/listapartment";
+//	}
 	
 	@RequestMapping("/user/filterapartment")
 	public String listapartment(@RequestParam("field") Optional<String> field,Model model,
@@ -386,11 +386,11 @@ public class UserController {
 				min = 10000000;
 				max = 1000000000;
 			}
-			List<Apartment> listApartment = apartmentDao.findFilter(min, max,apartType,cityFilter,districtFilter,wardFilter);
-			sessionService.set("listApartment", new PageImpl<>(listApartment, pageable, listApartment.size()));
+//			List<Apartment> listApartment = apartmentDao.findFilter(min, max,apartType,cityFilter,districtFilter,wardFilter);
+//			sessionService.set("listApartment", new PageImpl<>(listApartment, pageable, listApartment.size()));
 		}else {
-			Page<Apartment> page = apartmentDao.findAllByStatus(true,pageable);
-            sessionService.set("listApartment", page);
+//			Page<Apartment> page = apartmentDao.findAllByStatus(true,pageable);
+
 		}
 		req.setAttribute("views","/WEB-INF/views/user/listApartmentForm.jsp");
 		return "/WEB-INF/views/user/index.jsp";
@@ -400,21 +400,10 @@ public class UserController {
 	
 	@RequestMapping("/detailapartment/{id}")
 	public String detailApartment(Model model,@PathVariable("id") String apartmentId) {
-		String API_URL = "http://localhost:8080/rest/apartments/" + apartmentId;
-        ResponseEntity<Apartment> response = restTemplate.exchange(API_URL, HttpMethod.GET, null, 
-            new ParameterizedTypeReference<Apartment>() {});
-        
-        // Kiểm tra xem phản hồi có thành công không
-        if (response.getStatusCode().is2xxSuccessful()) {
-            // Lấy danh sách căn hộ từ phản hồi
-            Apartment detailApartment = response.getBody();
-            model.addAttribute("detailApartment", detailApartment);
-            System.out.println(detailApartment);
-        } else {
-            System.out.println("Không thể lấy dữ liệu từ API.");
-        }
 
-		return "user/detailapartment";
+		model.addAttribute("apartmentId",apartmentId);
+		System.out.println(apartmentId);
+		return "user/detailapartment1";
 	}
 	
 	@GetMapping("/login/google")
@@ -602,6 +591,11 @@ public class UserController {
 			return "user/changePass";
 		}
 	}
+	
+	@RequestMapping("user/listapartment1")
+    public String apartment() {
+    	return "user/listapartment2";
+    }
 
 //	---------------------------------------------------------------------------------------------------------
 //	---------------------------------------------------------------------------------------------------------

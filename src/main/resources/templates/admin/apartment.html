@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.thymeleaf.org">
 
 <head>
 	<meta charset="UTF-8">
 	<title>Insert title here</title>
 	<!-- Favicons -->
-	<link th:href="@{/assets/img/favicon.png}" rel="icon">
-	<link th:href="@{/assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+	<link th:href="@{../assets/img/favicon.png}" rel="icon">
+	<link th:href="@{../assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
 
 	<!-- Google Fonts -->
 	<link href="https://fonts.gstatic.com" rel="preconnect">
@@ -15,15 +15,16 @@
 		rel="stylesheet">
 
 	<!-- Vendor CSS Files -->
-	<link th:href="@{/assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
-	<link th:href="@{/assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
-	<link th:href="@{/assets/vendor/simple-datatables/style.css}" rel="stylesheet">
+	<link th:href="@{../assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+	<link th:href="@{../assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+
 
 	<!-- Template Main CSS File -->
-	<link th:href="@{/assets/css/style.css}" rel="stylesheet">
+	<link th:href="@{../assets/css/style.css}" rel="stylesheet">
+	<script src="https://kit.fontawesome.com/3580c0d03d.js" crossorigin="anonymous"></script>
 </head>
 
-<body>
+<body ng-app="app" ng-controller="apartmentCtrl">
 	<!-- Header -->
 	<header id="header" class="header fixed-top d-flex align-items-center">
 		<div class="d-flex align-items-center justify-content-between">
@@ -113,146 +114,114 @@
 					<div class="card">
 						<div class="card-body">
 							<h5 class="card-title">Edit account</h5>
-							<div class="alert alert-success" th:if="${not #strings.isEmpty(messageApartment)}" th:text="${messageApartment}"></div>
+							<!-- <div class="alert alert-success" th:if="${not #strings.isEmpty(messageApartment)}" th:text="${messageApartment}"></div> -->
 							<!-- General Form Elements -->
-							<form action="/student/save" th:object="${apart}" enctype="multipart/form-data"
-								method="post">
+							<form>
 								<div class="row">
 									<div class="col-md-6">
 										<div class="form-group">
 											<label for="content">Apartment Content:</label>
-											<input type="text" id="content" name="content" class="form-control" th:field="*{content}"
+											<input type="text" id="content" name="content" class="form-control" ng-model="form.content" 
 												 />
-											<p class="text-info" th:if="${#fields.hasErrors('content')}"
-												th:errors="*{content}"></p>
+											<!-- <p class="text-info" th:if="${#fields.hasErrors('content')}"
+												th:errors="*{content}"></p> -->
 										</div> <br>
 										<div class="form-group">
 											<label for="apartmentType">Apartment Type:</label>
-											<select id="apartmentType" name="apartmentType" class="form-control"
-												th:field="*{apartmentType}">
-												<!-- Options for apartment types -->
+											<select id="apartmentType" name="apartmentType" class="form-control" ng-model="form.apartmentType" ng-options="type as type.name for type in cates track by type.id">
 												<option value="" disabled selected>Choose apartment type</option>
-												<option th:each="type : ${apartType}" th:value="${type.id}"
-													th:text="${type.name}"></option>
 											</select>
-											<p class="text-info" th:if="${#fields.hasErrors('apartmentType')}"
-												th:errors="*{apartmentType}"></p>
+											<!-- <p class="text-info" th:if="${#fields.hasErrors('apartmentType')}"
+												th:errors="*{apartmentType}"></p> -->
 										</div><br>
 										<div class="form-group">
 											<label for="price">Apartment Price:</label>
-											<input type="text" id="price" name="price" class="form-control"
-												th:field="*{price}" />
-											<p class="text-info" th:if="${#fields.hasErrors('price')}"
-												th:errors="*{price}"></p>
+											<input type="text" id="price" name="price" class="form-control" ng-model="form.price"/>
+											<!-- <p class="text-info" th:if="${#fields.hasErrors('price')}"
+												th:errors="*{price}"></p> -->
 										</div><br>
 										<div class="form-group">
 											<label for="acreage">Apartment Acreage:</label>
 											<input type="text" id="acreage" name="acreage" class="form-control"
-												th:field="*{acreage}" />
-											<p class="text-info" th:if="${#fields.hasErrors('acreage')}"
-												th:errors="*{acreage}"></p>
+												 ng-model="form.acreage"/>
+											<!-- <p class="text-info" th:if="${#fields.hasErrors('acreage')}"
+												th:errors="*{acreage}"></p> -->
 										</div><br>
 										<div class="form-group">
 											<label for="apartImageTitleInput">Apartment Image:</label>
-										
-											<input type="file" id="apartImageTitleInput" name="apartImageTitle" 
-												class="form-control" 
-												onchange="updatePreview('apartImageTitleInput', 'apartImageTitlePreview')" />
-											<img id="apartImageTitlePreview" th:src="@{'/images/' + ${apartImageTitle}}"
-												alt="Image Preview" width="100"
-												class="img-thumbnail img-thumbnail-preview">
-										</div><br>
-										<div class="form-group">
-											<label for="">Apartment image1:</label> <img id="apartImageTitlePreview1"
-												th:src="@{'/images/' + ${apartImage1}}" alt="Image Preview" width="100"
-												class="img-thumbnail img-thumbnail-preview"> <input type="file"
-												id="apartImageTitleInput1" name="apartImage1" class="form-control"
-												onchange="updatePreview('apartImageTitleInput1', 'apartImageTitlePreview1')" />
-										</div><br>
-										<div class="form-group">
-											<label for="">Apartment image2:</label> <img id="apartImageTitlePreview2"
-												th:src="@{'/images/' + ${apartImage2}}" alt="Image Preview" width="100"
-												class="img-thumbnail img-thumbnail-preview"> <input type="file" 
-												id="apartImageTitleInput2" name="apartImage2" class="form-control" 
-												onchange="updatePreview('apartImageTitleInput2', 'apartImageTitlePreview2')" />
+											<input type="file" accept="image/*" multiple class="form-control" 
+												onchange="angular.element(this).scope().upload(this.files)" />
+											<label ng-repeat="filename in currentfiles" title="Double click to delete" style="margin-top: 10px;">
+												<img ng-src="../images/{{filename | removeBrackets}}" width="100" height="100" style="margin-right: 10px;">
+											</label>
 										</div><br>
 										<!-- Other image inputs -->
 									</div>
 									<div class="col-md-6">
-										<div class="form-group">
-											<label for="apartImageTitleInput3">Apartment image3:</label>
-											<img id="apartImageTitlePreview3" th:src="@{'/images/' + ${apartImage3}}"
-												alt="Image Preview" width="100"
-												class="img-thumbnail img-thumbnail-preview">
-											<input type="file" id="apartImageTitleInput3" name="apartImage3" 
-												class="form-control"
-												onchange="updatePreview('apartImageTitleInput3', 'apartImageTitlePreview3')" />
-										</div><br>
-										<label for="province">Tỉnh/Thành phố:</label>
-										<select id="province" name="cityValue" onchange="loadDistricts()"
-											>
-											<option value="" selected disabled>Chọn tỉnh/thành phố</option>
+										<label for="citySelect">Tỉnh/Thành phố:</label>
+										<select id="citySelect" ng-model="selectedCityId" ng-change="updateDistricts()"
+           									ng-options="city.Id as city.Name for city in cities" >
+											<option value="">Chọn Thành phố</option>
 										</select><br><br>
 
 										<!-- Quận/Huyện -->
-										<label for="district">Quận/Huyện:</label>
-										<select id="district" name="districtValue" onchange="loadWards()"
-											>
-											<option value="" selected disabled>Chọn quận/huyện</option>
+										<label for="districtSelect">Quận/Huyện:</label>
+										<select id="districtSelect" name="districtValue" ng-model="selectedDistrictId" ng-change="updateWards()"
+            								ng-options="district.Id as district.Name for district in districts" ng-disabled="!districts.length">
+											<option value="">Chọn Quận</option>
 										</select><br><br>
 
 										<!-- Phường/Xã -->
-										<label for="ward">Phường/Xã:</label>
-										<select id="ward" name="wardValue" >
-											<option value="" selected disabled>Chọn phường/xã</option>
+										<label for="wardSelect">Phường/Xã:</label>
+										<select id="wardSelect" ng-model="selectedWardId"
+            								ng-options="ward.Id as ward.Name for ward in wards" ng-disabled="!wards.length">
+											<option value="">Chọn Phường</option>
 										</select><br><br>
 
 										<div class="form-group">
 											<label for="address">Apartment address:</label>
 											<input type="text" id="address" name="address" class="form-control"
-												th:field="*{address}" />
-											<p class="text-info" th:if="${#fields.hasErrors('address')}"
-												th:errors="*{address}"></p>
+											 ng-model="form.address"/>
+											<!-- <p class="text-info" th:if="${#fields.hasErrors('address')}"
+												th:errors="*{address}"></p> -->
 										</div><br>
 
 										<div class="form-group">
 											<label for="description">Apartment Description:</label>
-											<textarea id="description" name="description" th:field="*{description}"
+											<textarea id="description" name="description" ng-model="form.description"
 												class="form-control"></textarea>
-											<p class="text-info" th:if="${#fields.hasErrors('description')}"
-												th:errors="*{description}"></p>
+											<!-- <p class="text-info" th:if="${#fields.hasErrors('description')}"
+												th:errors="*{description}"></p> -->
 										</div><br>
 
 										<div class="form-group">
 											<label for="status">Status:</label>
-											<div th:each="s : ${status}">
-												<input type="radio" id="status" name="status" th:value="${s.key}"
-													th:field="*{status}" />
-												<label th:for="${'status' + s.key}" th:text="${s.value}"></label>
+											<div>
+												<select id="" name="" ng-model="form.status">
+													<option value="Active" selected >Active</option>
+													<option value="No Active" >No Active</option>
+													<option value="Rented" >Rented</option>
+												</select><br><br>
 											</div>
-											<p class="text-info" th:if="${#fields.hasErrors('status')}"
-												th:errors="*{status}"></p>
+											<!-- <p class="text-info" th:if="${#fields.hasErrors('status')}"
+												th:errors="*{status}"></p> -->
 										</div>
 									</div>
 								</div>
 								<br>
-								<!-- Hidden inputs -->
-								<input type="hidden" id="hiddenProvince" name="city" value="${city}" th:field="*{city}"/>
-								<input type="hidden" id="" name="it"  th:value="${apartImageTitle}" />
-								<input type="hidden" id="" name="i1"  th:value="${apartImage1}" />
-								<input type="hidden" id="" name="i2"  th:value="${apartImage2}" />
-								<input type="hidden" id="" name="i3"  th:value="${apartImage3}" />
-								<input type="hidden" id="hiddenDistrict" name="district" value="${district}" th:field="*{district}"/>
-								<input type="hidden" id="hiddenWard" name="ward" value="${ward}" th:field="*{ward}"/>
-								<input type="hidden" id="hiddenId" name="id" th:field"*{id}" th:value="${id}" />
 								<!-- Form action buttons -->
-								<button class="btn btn-primary" type="submit"
-									formaction="/admin/createApartment">Save</button>
-								<button class="btn btn-secondary" type="submit"
+								<button class="btn btn-primary" 
+									ng-click="create()">Save</button>
+								<button class="btn btn-secondary" 
 									formaction="/admin/updateApartment">Update</button>
-								<button class="btn btn-danger" type="submit"
+								<button class="btn btn-danger" 
 									formaction="/admin/deleteApartment">Delete</button>
 							</form>
+							<hr>
+							<form ng-submit="uploadFile()">
+						        <input type="file" id="file" onchange="angular.element(this).scope().readExcel(this.files)" />
+						        <button class="btn btn-primary" type="submit">Upload By Excel</button>
+						    </form>
 							<hr>
 							<!-- End
                              <!-- Table of Account information -->
@@ -276,23 +245,23 @@
 									</thead>
 									<tbody>
 										<!-- Loop through apartmentList -->
-										<tr th:each="apartment : ${apartmentList}">
-											<td th:text="${apartment.id}"></td>
-											<td th:text="${apartment.content}"></td>
-											<td th:text="${apartment.apartmentType.name}"></td>
-											<td th:text="${apartment.price}"></td>
-											<td th:text="${apartment.acreage}"></td>
-											<td th:text="${apartment.address}"></td>
-											<td th:text="${apartment.city}"></td>
-											<td th:text="${apartment.district}"></td>
-											<td th:text="${apartment.ward}"></td>
-											<td th:text="${apartment.description}"></td>
+										<tr ng-repeat= "item in items">
+											<td>{{item.id}}</td>
+											<td>{{item.content}}</td>
+											<td>{{item.apartmentType.name}}</td>
+											<td>{{item.price | number:2}}</td>
+											<td>{{item.acreage}}</td>
+											<td>{{item.address}}</td>
+											<td>{{item.city}}</td>
+											<td>{{item.district}}</td>
+											<td>{{item.ward}}</td>
+											<td>{{item.description}}</td>
 											<td>
 												<!-- Edit and Delete buttons -->
-												<a th:href="@{'/editApartment/' + ${apartment.id}}">Edit</a>
-												<a th:href="@{'/deleteApartment/' + ${apartment.id}}">Delete</a>
+												<a ng-click="edit(item)" class="btn btn-warning"><i class="fa-solid fa-pen-to-square"></i> Edit</a>
+												<a ng-click="delete(item)" class="btn btn-danger"><i class="fa-solid fa-trash"></i> Delete</a>
 											</td>
-										</tr><!-- End loop -->
+										</tr>End loop
 									</tbody>
 								</table>
 							</div><!-- End Table -->
@@ -306,7 +275,7 @@
 	<!-- Footer -->
 	<footer id="footer" class="footer">
 		<div class="copyright">
-			&copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+			&copy; Copyrights <strong><span>NiceAdmin</span></strong>. All Rights Reserved
 		</div>
 	</footer><!-- End Footer -->
 
@@ -314,191 +283,15 @@
 	<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
 			class="bi bi-arrow-up-short"></i></a>
 
-	<!-- JavaScript Files -->
-	<script th:src="@{/assets/js/main.js}"></script>
-	<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js}"></script>
+	
 
 
 </body>
-<script>
-	function populateDropdown(dropdownId, data) {
-		var dropdown = $("#" + dropdownId);
-		dropdown.empty();
-		dropdown.append('<option value="" selected disabled>Chọn ' + dropdownId
-			+ '</option>');
-		$.each(data, function (key, value) {
-			dropdown.append('<option value="' + value.Id + '">' + value.Name
-				+ '</option>');
-		});
-	}
+<!-- JavaScript Files -->
+	<script th:src="@{../assets/angular.min.js}"></script>
+	<script th:src="@{../assets/js/apartment.js}"></script>
 
-	function loadDistricts() {
-		console.log("City Value: " + $("#province").val());
-		var provinceId = $("#province").val();
-		if (provinceId) {
-			$
-				.getJSON(
-					'https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json?fbclid=IwAR0rFIXdhDePPDSI5SeQZarnl_UazlS2REGaXelLWT74AGV9DEpjHlXKGdY',
-					function (data) {
-						var selectedProvince = data.find(function (
-							province) {
-							return province.Id === provinceId;
-						});
-						if (selectedProvince) {
-							populateDropdown('district',
-								selectedProvince.Districts);
-							$("#ward").empty();
-							$("#hiddenProvince").val(
-								selectedProvince.Name);
-							$("#ward")
-								.change(
-									function () {
-										$("#hiddenWard")
-											.val(
-												$(
-													"#ward option:selected")
-													.text());
-									});
-						}
-					}).fail(function () {
-						console.error('Error loading districts.');
-					});
-		} else {
-			$("#district").empty();
-			$("#ward").empty();
-		}
-	}
+	<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js}"></script>
 
-	function loadWards() {
-		console.log("City Value: " + $("#province").val());
-		console.log("District Value: " + $("#district").val());
-		var provinceId = $("#province").val();
-		var districtId = $("#district").val();
-		if (provinceId && districtId) {
-			$
-				.getJSON(
-					'https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json?fbclid=IwAR0rFIXdhDePPDSI5SeQZarnl_UazlS2REGaXelLWT74AGV9DEpjHlXKGdY',
-					function (data) {
-						var selectedProvince = data.find(function (
-							province) {
-							return province.Id === provinceId;
-						});
-						if (selectedProvince) {
-							var selectedDistrict = selectedProvince.Districts
-								.find(function (district) {
-									return district.Id === districtId;
-								});
-							if (selectedDistrict) {
-								populateDropdown('ward',
-									selectedDistrict.Wards);
-								$("#hiddenDistrict").val(
-									selectedDistrict.Name);
-
-							}
-						}
-					}).fail(function () {
-						console.error('Error loading wards.');
-					});
-		} else {
-			$("#ward").empty();
-			$("#hiddenWard").val("");
-
-		}
-	}
-
-	$
-		.getJSON(
-			'https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json?fbclid=IwAR0rFIXdhDePPDSI5SeQZarnl_UazlS2REGaXelLWT74AGV9DEpjHlXKGdY',
-			function (data) {
-				populateDropdown('province', data);
-			}).fail(function () {
-				console.error('Error loading provinces.');
-			});
-</script>
-
-<script>
-	function updatePreview(inputId, previewId) {
-		var input = document.getElementById(inputId);
-		var preview = document.getElementById(previewId);
-	
-		var file = input.files[0];
-		console.log(file);
-		if (file) {
-			var reader = new FileReader();
-
-			reader.onload = function (e) {
-				preview.src = e.target.result;
-			
-			};
-
-			reader.readAsDataURL(file);
-		}
-	
-	
-	
-}
-	
-
-</script>
-<script>
-	$(document)
-		.ready(
-			function () {
-				const cityValue = "[[${cityValue}]]";
-				const districtValue = "[[${districtValue}]]";
-				const wardValue = "[[${wardValue}]]";
-			
-				// Log giá trị để kiểm tra
-				console.log("City Value: " + cityValue);
-				console.log("District Value: " + districtValue);
-				console.log("Ward Value: " + wardValue);
-	
-
-				// Chọn giá trị cho dropdown tỉnh/thành phố
-				$("#province").prop('value', cityValue);
-
-				// Gọi hàm loadDistricts và điền dữ liệu trực tiếp từ server
-				$
-					.getJSON(
-						'https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json?fbclid=IwAR0rFIXdhDePPDSI5SeQZarnl_UazlS2REGaXelLWT74AGV9DEpjHlXKGdY',
-						function (data) {
-							populateDropdown('province', data);
-
-							// Điền dữ liệu cho dropdown quận/huyện và phường/xã từ server
-							var selectedProvince = data
-								.find(function (province) {
-									return province.Id === cityValue;
-								});
-							$("#province").prop('value',
-								cityValue);
-							if (selectedProvince) {
-								populateDropdown(
-									'district',
-									selectedProvince.Districts);
-								$("#hiddenProvince").val(
-									selectedProvince.Name);
-								$("#district").prop('value',
-									districtValue);
-
-								var selectedDistrict = selectedProvince.Districts
-									.find(function (district) {
-										return district.Id === districtValue;
-									});
-								if (selectedDistrict) {
-									populateDropdown(
-										'ward',
-										selectedDistrict.Wards);
-									$("#hiddenDistrict")
-										.val(
-											selectedDistrict.Name);
-									$("#ward").prop('value',
-										wardValue);
-								}
-							}
-						}).fail(function () {
-							console.error('Error loading provinces.');
-						});
-			});
-</script>
 
 </html>
