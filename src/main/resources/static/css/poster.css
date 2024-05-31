@@ -1,0 +1,76 @@
+.search {
+    display: flex;
+    align-items: center;
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+.search input {
+    border: none;
+    outline: none;
+    flex: 1;
+}
+
+.search .search-icon {
+    width: 20px;
+    height: 20px;
+    background-image: url('https://cdn-icons-png.flaticon.com/512/49/49116.png');
+    background-size: cover;
+}
+.btn-group-custom {
+    display: flex;
+    gap: 10px; 
+}
+
+.btn-custom {
+    background-color: white;
+    color: black;
+    border: 1px solid #ccc;
+}
+
+.btn-custom.active {
+    background: #334f7b;
+    border-color: #334f7b;
+    color: #fff;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+.user-info-left {
+    margin-right: 15px;
+}
+.user-info-right .username {
+    font-size: 1.4rem;
+    margin-bottom: 4px;
+}
+.user-info img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+}
+.user-info h4 {
+    margin-top: 18px;
+    margin-bottom: 5px;
+}
+.account-balance {
+    padding: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+.account-balance .balance {
+    margin-bottom: 10px;
+}
+
+.avatar-container {
+    text-align: center;
+}
+.avatar-container img {
+    display: block;
+    margin: 0 auto;
+}

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<!-- Favicons -->
+	<link th:href="@{../assets/img/favicon.png}" rel="icon">
+	<link th:href="@{../assets/img/apple-touch-icon.png}" rel="apple-touch-icon">
+
+	<!-- Google Fonts -->
+	<link href="https://fonts.gstatic.com" rel="preconnect">
+	<link
+		th:href="@{https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i}"
+		rel="stylesheet">
+
+	<!-- Vendor CSS Files -->
+	<link th:href="@{../assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
+	<link th:href="@{../assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+
+
+	<!-- Template Main CSS File -->
+	<link th:href="@{../assets/css/style.css}" rel="stylesheet">
+	<script src="https://kit.fontawesome.com/3580c0d03d.js" crossorigin="anonymous"></script>
+	<link th:href="@{../css/poster.css}" rel="stylesheet">
+</head>
+
+<body>
+	<!-- Header -->
+	<header id="header" class="header fixed-top d-flex align-items-center">
+		<div class="d-flex align-items-center justify-content-between">
+			<a href="#" class="logo d-flex align-items-center">
+				<img th:src="@{/assets/img/logo.png}" alt="">
+				<span class="d-none d-lg-block">Poster</span>
+			</a>
+			<i class="bi bi-list toggle-sidebar-btn"></i>
+		</div>
+		
+	</header><!-- End Header -->
+
+	<!-- Sidebar -->
+	<aside id="sidebar" class="sidebar">
+        <div class="user-info">
+            <div class="user-info-left">
+                <img src="https://via.placeholder.com/80" alt="Avatar">
+            </div>
+            <div class="user-info-right">
+                <h2 class="username">Tên người dùng</h2>
+            </div>
+            
+        </div>
+        <div class="account-balance">
+            <div class="balance">Số dư tk: <strong>1.000.000 VND</strong></div>
+            <button type="button" class="btn btn-primary btn-block">Nạp tiền</button>
+        </div>
+		<ul class="sidebar-nav" id="sidebar-nav">
+			<li class="nav-item">
+				<a class="nav-link collapsed" th:href="@{/poster/index}">
+					<i class="bi bi-grid"></i>
+					<span>Quản lý đăng tin</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link collapsed" th:href="@{/poster/dangtinmoi}">
+					<i class="bi bi-journal-text"></i>
+					<span>Đăng tin mới</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link collapsed" th:href="@{/poster/lichsunaptien}">
+					<i class="bi bi-layout-text-window-reverse"></i>
+					<span>Lịch sử nạp tiền</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link collapsed" th:href="@{/poster/rented}">
+					<i class="bi bi-envelope"></i>
+					<span>Lịch sử giao dịch</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link collapsed" th:href="@{/poster/thongtincanhan}">
+					<i class="bi bi-card-list"></i>
+					<span>Thông tin cá nhân</span>
+				</a>
+			</li>
+			<li class="nav-item">
+				<a class="nav-link collapsed" th:href="@{/poster/lienhe}">
+					<i class="bi bi-person"></i>
+					<span>Liên hệ và trợ giúp</span>
+				</a>
+			</li>
+		</ul>
+	</aside><!-- End Sidebar -->
+
+	<!-- Main Content -->
+	<main id="main" class="main">
+		<div class="pagetitle">
+			<h1>Lịch sử giao dịch</h1>
+		</div><!-- End Page Title -->
+        
+        <div class="row mb-3">
+            <div class="col-sm-3">
+                  <div class="col-sm-10">
+                    <input type="date" class="form-control">
+                  </div>
+            </div>
+            <div class="col-sm-3">
+                  <div class="col-sm-10">
+                    <input type="date" class="form-control">
+                  </div>
+            </div>
+          </div>
+          <div class="row col-sm mb-3">
+            <div class="col-sm-auto">
+                <button type="submit" class="btn btn-custom">Tất cả</button>
+            </div>
+            
+          </div>
+          <section class="section">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="card">
+						<div class="card-body">
+							<!-- General Form Elements -->
+							<!-- End General Form Elements -->
+							<div class="table-responsive">
+								<table class="table table-striped table-bordered">
+									<thead>
+										<tr>
+											<th>Thời gian</th>
+											<th>Mã giao dịch</th>
+											<th>Tin rao</th>
+                                            <th>Loại giao dịch</th>
+                                            <th>Số tiền (đ)</th>
+										</tr>
+									</thead>
+									<tbody>
+                                            <tr>
+                                                <th>1</th>
+                                                <th>2</th>
+                                                <th>3</th>
+                                                <th>4</th>
+                                                <th>5</th>
+                                            </tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main><!-- End #main -->
+
+	<!-- Footer -->
+	<footer id="footer" class="footer">
+		<div class="copyright">
+			&copy; Copyrights <strong><span>Poster</span></strong>. All Rights Reserved
+		</div>
+	</footer><!-- End Footer -->
+
+	<!-- Back to Top Button -->
+	<a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i
+			class="bi bi-arrow-up-short"></i></a>
+
+
+
+
+</body>
+<!-- JavaScript Files -->
+<script th:src="@{../assets/angular.min.js}"></script>
+
+<script th:src="@{https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js}"></script>
+
+
+</html>
