@@ -17,6 +17,7 @@ app.controller("apartmentCtrl", function ($scope, $http) {
   $scope.start = ($scope.page - 1) * $scope.limit;
   $scope.filenames = [];
   $scope.currentfiles = [];
+  $scope.filesImage = [];
   $scope.totalPage = 0;
   $scope.numberOfPage = 0;
 
@@ -121,13 +122,17 @@ app.controller("apartmentCtrl", function ($scope, $http) {
     $scope.selectedDistrictId = item.district;
     $scope.updateWards();
     $scope.selectedWardId = item.ward;
-    
-    
+
     $http
       .get(urlImage + "/" + $scope.form.id)
       .then(function (resp) {
-		$scope.currentfiles = [];
-        $scope.currentfiles = resp.data;
+        $scope.currentfiles = [];
+        $scope.filesImage = resp.data;
+        console.log($scope.filesImage);
+        $scope.currentfiles = [];
+        $scope.currentfiles = $scope.currentfiles.concat(
+          $scope.filesImage.imageData
+        );
         console.log($scope.currentfiles);
       })
       .catch(function (error) {
@@ -136,6 +141,61 @@ app.controller("apartmentCtrl", function ($scope, $http) {
     console.log(item);
   };
 
+  $scope.update = function () {
+    // Tạo một đối tượng Apartment
+    var item = angular.copy($scope.form);
+    item.ward = $scope.selectedWardId;
+    item.district = $scope.selectedDistrictId;
+    item.city = $scope.selectedCityId;
+   
+    console.log(item);
+    // Gửi request lên server bằng phương thức POST
+    $http
+      .put(urlApartment + `/${item.id}`, item)
+      .then(function (resp) {
+        var index = $scope.items.findIndex((a) => a.id == item.id);
+        $scope.items[index] = item;
+        var images = $scope.currentfiles.map(function (fileName) {
+          return {
+            imageData: fileName,
+            apartment: item, // assume that resp.data contains the created apartment
+          };
+          
+        });
+        if (!$scope.currentfiles){
+          $http
+            .post(urlImage + "/save", images)
+            .then(function (resp) {
+              console.log("Images saved");
+            })
+            .catch(function (error) {
+              console.log("Error saving images", error);
+            });
+        }else{
+            $http
+              .put(urlImage + "/update", images)
+              .then(function (resp) {
+                $scope.currentfiles = [];
+                for(let i=0;i < 4;i++){
+                  $scope.currentfiles = $scope.currentfiles.push(
+                    images[i].fileName
+                  );
+                }
+                console.log("Images updated");
+              })
+              .catch(function (error) {
+                console.log("Error updated images", error);
+              });     
+        }
+          
+        $scope.reset();
+        alert("Thêm mới sản phẩm thành công");
+      })
+      .catch(function (error) {
+        console.log("error", error);
+        alert("Thêm mới sản phẩm thất bại");
+      });
+  };
 
   $scope.getTypeApart = function () {
     $http
@@ -177,11 +237,13 @@ app.controller("apartmentCtrl", function ($scope, $http) {
       })
       .then((resp) => {
         // Update filenames array with the uploaded files
-        console.log(files);
-        console.log(resp.data);
+        console.log(files + "???");
+        console.log(resp.data + "????");
         $scope.filenames = resp.data;
-        $scope.currentfiles = $scope.currentfiles.concat($scope.filenames);
-        console.log($scope.filenames);
+        console.log("filename", $scope.filenames);
+        $scope.currentfiles = [];
+        $scope.currentfiles = $scope.currentfiles.concat($scope.filenames);   
+        console.log("currentfiles",$scope.currentfiles);
       })
       .catch((error) => {
         console.log("Errors", error);
@@ -219,57 +281,87 @@ app.controller("apartmentCtrl", function ($scope, $http) {
     $scope.selectedWardId = "";
   };
 
-  $scope.excelData = [];
+  // Function to load JSON data from URL
+  async function loadJsonData(url) {
+    const response = await fetch(url);
+    return await response.json();
+  }
 
-  $scope.readExcel = function (files) {
-    const file = files[0];
-    const reader = new FileReader();
+  $scope.import = async function (files) {
+    var reader = new FileReader();
+    const cityData = await loadJsonData(urlAddress);
+    reader.onloadend = async () => {
+      var workbook = new ExcelJS.Workbook();
+      await workbook.xlsx.load(reader.result);
+      const worksheet = workbook.getWorksheet("Sheet1");
+      worksheet.eachRow((row, index) => {
+        if (index > 1) {
+          const cityName = row.getCell(12).value;
+          const districtName = row.getCell(11).value;
+          const wardName = row.getCell(10).value;
 
-    reader.onload = function (e) {
-      const data = e.target.result;
-      const workbook = XLSX.read(data, { type: "binary" });
-      const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-      const excelRows = XLSX.utils.sheet_to_row_object_array(firstSheet);
+          // Find city ID
+          const city = cityData.find((city) => city.Name === cityName);
+          if (!city) {
+            console.error(`City not found: ${cityName}`);
+            return;
+          }
 
-      // Gán dữ liệu vào biến tạm
-      $scope.excelData = excelRows.map((row) => ({
-        id: row["id"],
-        content: row["content"],
-        ward: row["ward"],
-        district: row["district"],
-        city: row["city"],
-        address: row["address"],
-        price: row["price"],
-        acreage: row["acreage"],
-        description: row["description"],
-        status: row["status"],
-        apartmentType: row["apartmentType"],
-      }));
+          // Find district ID
+          const district = city.Districts.find(
+            (district) => district.Name === districtName
+          );
+          if (!district) {
+            console.error(
+              `District not found in city ${cityName}: ${districtName}`
+            );
+            return;
+          }
 
-      $scope.$apply(); // Cập nhật scope
-      console.log($scope.excelData);
+          // Find ward ID
+          const ward = district.Wards.find((ward) => ward.Name === wardName);
+          if (!ward) {
+            console.error(
+              `Ward not found in district ${districtName}: ${wardName}`
+            );
+            return;
+          }
+
+          // Construct the apartment type correctly
+          const apartType = {
+            id: row.getCell(3).value,
+            name: row.getCell(4).value,
+          };
+
+          let apartment = {
+            id: row.getCell(1).value,
+            content: row.getCell(2).value,
+            apartmentType: apartType, // Gửi dưới dạng đối tượng
+            price: row.getCell(5).value,
+            address: row.getCell(6).value,
+            acreage: row.getCell(7).value,
+            description: row.getCell(8).value,
+            status: row.getCell(9).value,
+            city: city.Id,
+            district: district.Id,
+            ward: ward.Id,
+          };
+
+          $http
+            .post(urlApartment, apartment)
+            .then(function (resp) {
+              console.log(resp.data);
+              $scope.items.push(resp.data);
+              $scope.reset();
+              alert("Thêm mới sản phẩm thành công");
+            })
+            .catch(function (error) {
+              console.log("Error: ", error);
+            });
+        }
+      });
     };
-
-    reader.onerror = function (ex) {
-      console.log(ex);
-    };
-
-    reader.readAsBinaryString(file);
-  };
-
-  $scope.uploadFile = function () {
-    if ($scope.excelData.length) {
-      $http
-        .post(urlApartment + "/bulk-upload", $scope.excelData)
-        .then(function (response) {
-          alert("File uploaded and processed successfully!");
-        })
-        .catch(function (error) {
-          console.log("Error uploading file", error);
-        });
-    } else {
-      alert("Please select a valid Excel file first.");
-    }
+    reader.readAsArrayBuffer(files[0]);
   };
 
   $scope.loadAddress();

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -73,6 +74,18 @@ public class ApartmentImageController {
 	        return ResponseEntity.status(HttpStatus.CREATED).build();
 	    }
 	 
+	 @PutMapping("/update")
+	    public ResponseEntity<Void> updateImageInfo(@RequestBody List<ApartmentImage> images) {
+	        try {
+	            for (ApartmentImage image : images) {
+	                apartmentImageDao.save(image);
+	            }
+	        } catch (Exception e) {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	        }
+	        return ResponseEntity.status(HttpStatus.CREATED).build();
+	    }
+	 
 	 
 
 
@@ -90,14 +103,14 @@ public class ApartmentImageController {
 	    }
 	    
 	    @GetMapping("/{apartmentId}")
-	    public ResponseEntity<List<String>> listFilesByApartment(@PathVariable String apartmentId) {
+	    public ResponseEntity<List<ApartmentImage>> listFilesByApartment(@PathVariable String apartmentId) {
 	        try {
 	            List<ApartmentImage> images = apartmentImageDao.findByApartmentId(apartmentId);
 	            List<String> fileNames = new ArrayList<>();
 	            for (ApartmentImage image : images) {
 	                fileNames.add(image.getImageData());
 	            }
-	            return ResponseEntity.ok(fileNames);
+	            return ResponseEntity.ok(images);
 	        } catch (Exception e) {
 	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
 	        }

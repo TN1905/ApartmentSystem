@@ -17,6 +17,7 @@
 	<!-- Vendor CSS Files -->
 	<link th:href="@{../assets/vendor/bootstrap/css/bootstrap.min.css}" rel="stylesheet">
 	<link th:href="@{../assets/vendor/bootstrap-icons/bootstrap-icons.css}" rel="stylesheet">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
 
 
 	<!-- Template Main CSS File -->
@@ -213,13 +214,13 @@
 								<button class="btn btn-primary" 
 									ng-click="create()">Save</button>
 								<button class="btn btn-secondary" 
-									formaction="/admin/updateApartment">Update</button>
+									ng-click="update()">Update</button>
 								<button class="btn btn-danger" 
 									formaction="/admin/deleteApartment">Delete</button>
 							</form>
 							<hr>
 							<form ng-submit="uploadFile()">
-						        <input type="file" id="file" onchange="angular.element(this).scope().readExcel(this.files)" />
+						        <input type="file" id="file" onchange="angular.element(this).scope().import(this.files)" />
 						        <button class="btn btn-primary" type="submit">Upload By Excel</button>
 						    </form>
 							<hr>
