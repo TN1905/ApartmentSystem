@@ -10,7 +10,6 @@
 					<form class="custom-form" role="form" action="../user/confirmRegister" method="post">
 						<h2 class="hero-title text-center mb-4 pb-2">[(#{lo.a.confirmregister})]</h2>
 						<div class="alert">
-							<input type="hidden" name="thongbao" th:value="${message}" />
 							<div class="alert alert-success" th:if="${messageCodeRegisterSuccess}"
 								th:text="${messageCodeRegisterSuccess}"></div>
 							<div class="alert alert-danger" th:if="${messageCodeRegisterFail}"

@@ -15,12 +15,18 @@
 						href="/login/facebook">[(#{lo.a.continuewithfacebook})]</a>
 				</div>
 				<div class="col-lg-6 col-12 mx-auto">
-					<form action="../user/signup" method="post" th:action="@{/user/signup}" th:object="${account}"
+					<form action="../user/register" method="post" th:action="@{/user/register}" th:object="${account}"
 						class="custom-form" role="form">
 						<h2 class="hero-title text-center mb-4 pb-2">
 							[[#{lo.a.signup}]]
 						</h2>
-						<div class="alert alert-danger" th:if="${messageRegister}" th:text="${messageRegister}"></div>
+						<div class="alert">
+							<input type="hidden" name="thongbao" th:value="${messageRegister}" />
+							<div class="alert alert-success" th:if="${messageRegisterSuccess}"
+								th:text="${messageRegisterSuccess}"></div>
+							<div class="alert alert-danger" th:if="${messageRegisterFail}"
+								th:text="${messageRegisterFail}"></div>
+						</div>
 						<div class="row">
 							<div class="col-lg-6 col-md-6 col-12">
 								<div class="form-floating">

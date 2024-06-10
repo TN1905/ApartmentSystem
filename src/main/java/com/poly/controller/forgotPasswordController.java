@@ -48,7 +48,7 @@ public class forgotPasswordController {
 			return "user/forgotpassword";
 		}
 
-		Account account = dao.findByEmail(email);
+		Account account = dao.findByEmailIgnoreCase(email);
 		if (account == null) {
 			model.addAttribute("message", "Không tìm thấy địa chỉ email.");
 			return "user/forgotpassword";
@@ -103,7 +103,7 @@ public class forgotPasswordController {
 		        model.addAttribute("message", "Không thể xác định email người dùng.");
 		        return "user/resetpassword";
 		    }
-		    Account account = dao.findByEmail(email);
+		    Account account = dao.findByEmailIgnoreCase(email);
 		    if (account == null) {
 		        model.addAttribute("message", "Không tìm thấy tài khoản.");
 		        return "user/resetpassword";

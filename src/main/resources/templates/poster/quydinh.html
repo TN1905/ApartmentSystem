@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{head.html :: head}">
+    <!-- Bootstrap core CSS -->
+</head>
+
+<body style="background-color: white">
+    <!-- ***** Preloader Start ***** -->
+    <div id="js-preloader" class="js-preloader">
+        <div class="preloader-inner">
+            <span class="dot"></span>
+            <div class="dots">
+                <span></span> <span></span> <span></span>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Preloader End ***** -->
+
+    <div th:replace="~{header.html :: header1}"></div>
+    <header th:replace="~{header.html :: header2}"></header>
+
+    <div class="container mt-5">
+        <h1 class="text-center">Quy Định Khi Đăng Ký Đăng Tin Cho Thuê Phòng Trọ</h1>
+
+        <h2 class="mt-4">1. Thông Tin Người Đăng</h2>
+        <p>Người đăng tin phải cung cấp đầy đủ và chính xác các thông tin cá nhân sau:</p>
+        <ul>
+            <li>Họ và tên</li>
+            <li>Số điện thoại</li>
+            <li>Email liên hệ</li>
+            <li>Địa chỉ liên hệ</li>
+        </ul>
+
+        <h2 class="mt-4">2. Thông Tin Phòng Trọ</h2>
+        <p>Thông tin về phòng trọ phải được mô tả chi tiết và trung thực, bao gồm nhưng không giới hạn:</p>
+        <ul>
+            <li>Địa chỉ chính xác của phòng trọ</li>
+            <li>Diện tích phòng</li>
+            <li>Giá thuê phòng</li>
+            <li>Các tiện ích kèm theo</li>
+            <li>Hình ảnh thực tế của phòng trọ</li>
+        </ul>
+
+        <h2 class="mt-4">3. Quy Định Về Nội Dung</h2>
+        <p>Nội dung đăng tin phải tuân thủ các quy định sau:</p>
+        <ul>
+            <li>Không chứa thông tin sai lệch hoặc gây hiểu lầm</li>
+            <li>Không chứa nội dung phản cảm, xúc phạm hoặc vi phạm pháp luật</li>
+            <li>Không chứa quảng cáo hoặc spam</li>
+        </ul>
+
+        <h2 class="mt-4">4. Trách Nhiệm Của Người Đăng Tin</h2>
+        <p>Người đăng tin phải chịu trách nhiệm hoàn toàn về nội dung và tính chính xác của thông tin mình cung cấp. Nếu
+            có bất kỳ khiếu nại hoặc tranh chấp nào liên quan đến tin đăng, người đăng tin sẽ phải chịu trách nhiệm giải
+            quyết.</p>
+
+        <h2 class="mt-4">5. Điều Khoản Sử Dụng</h2>
+        <p>Bằng cách đăng tin, người dùng đồng ý tuân thủ các điều khoản sử dụng của website. Bất kỳ vi phạm nào cũng có
+            thể dẫn đến việc tin đăng bị xóa mà không cần thông báo trước.</p>
+
+        <h2 class="mt-4">6. Bảo Mật Thông Tin</h2>
+        <p>Thông tin cá nhân của người đăng tin sẽ được bảo mật và chỉ sử dụng cho mục đích liên quan đến việc cho thuê
+            phòng trọ. Website cam kết không chia sẻ thông tin cá nhân với bên thứ ba mà không có sự đồng ý của người
+            dùng.</p>
+
+        <h2 class="mt-4">7. Liên Hệ</h2>
+        <p>Nếu có bất kỳ thắc mắc hoặc cần hỗ trợ, vui lòng liên hệ với chúng tôi qua email: duccongsos@gmail.com hoặc
+            số điện thoại: 0123-456-789.</p>
+
+        <div class="form-check mt-4">
+            <input type="checkbox" class="form-check-input" id="agreeCheckbox" onclick="toggleButton()">
+            <label class="form-check-label" for="agreeCheckbox">Tôi đã đọc và đồng ý với các quy định</label>
+        </div>
+
+        <div class="mt-4">
+            <button class="btn btn-success" id="registerButton" data-bs-toggle="modal" data-bs-target="#exampleModal" disabled>Đăng Ký Đăng Tin</button>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">Thông Báo</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Tin đăng của bạn đã được gửi thành công và đang chờ duyệt bởi admin.
+                    </div>
+                    <div class="modal-footer">
+                        <a href="/user/index" data-bs-toggle="tooltip" title="Tooltip" class="btn btn-primary" role="button">Quay về trang chủ</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+        <path fill="#36363e" fill-opacity="1"
+            d="M0,96L40,117.3C80,139,160,181,240,186.7C320,192,400,160,480,149.3C560,139,640,149,720,176C800,203,880,245,960,250.7C1040,256,1120,224,1200,229.3C1280,235,1360,277,1400,298.7L1440,320L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z">
+        </path>
+    </svg>
+    <footer th:replace="~{footer.html :: footer}"></footer>
+
+    <!-- Scripts -->
+    <!-- Bootstrap core JavaScript -->
+    <script>
+        function toggleButton() {
+            var checkBox = document.getElementById("agreeCheckbox");
+            var button = document.getElementById("registerButton");
+            button.disabled = !checkBox.checked;
+        }
+    </script>
+</body>
+
+</html>

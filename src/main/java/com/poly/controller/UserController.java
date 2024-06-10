@@ -19,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
@@ -45,10 +47,12 @@ import com.poly.config.Environment;
 import com.poly.dao.AccountDAO;
 import com.poly.dao.ApartTypeDAO;
 import com.poly.dao.ApartmentDAO;
+import com.poly.dao.ConfirmationTokenDAO;
 import com.poly.dao.RentApartmentDetailDAO;
 import com.poly.entity.Account;
 import com.poly.entity.ApartType;
 import com.poly.entity.Apartment;
+import com.poly.entity.ConfirmationToken;
 import com.poly.entity.HistoryRented;
 import com.poly.entity.ReCapchaResponse;
 import com.poly.entity.Rented;
@@ -79,6 +83,8 @@ public class UserController {
 	AccountDAO dao;
 	@Autowired
 	MailerServiceImpl mailer;
+	@Autowired
+	ConfirmationTokenDAO confirmationTokenDao;
 	
 	@Autowired
 	SessionService sessionService;
@@ -163,77 +169,156 @@ public class UserController {
 		
 	}
 	
-	@RequestMapping("/user/register")
-	public String register(Model model,@ModelAttribute("account") Account account) {
+	@RequestMapping(value = "/user/register", method = RequestMethod.GET)
+	public String displayRegistration(Model model,@ModelAttribute("account") Account account) {
 
 	        return "user/register";
 		
 	}
 	
-	@RequestMapping("/user/signup")
-	public String signup(@RequestParam("confirmPass") String confirmPass,
-			@RequestParam("g-recaptcha-response") String captchaResponse,Model model,@Valid @ModelAttribute("account") Account acc,BindingResult result) throws MessagingException,ServletException, IOException{
-		model.addAttribute("messageRegister",null);
-		sessionService.set("accResgister", null);
-		sessionService.set("codeRegister", null);
-		String url = "https://www.google.com/recaptcha/api/siteverify";
-		String param = "?secret=6LeLiE8pAAAAAN7_WEtfdxzUynvA1dR_dijzuYEd&response=" + captchaResponse;	
-		ReCapchaResponse reCaptchaResponse = restTemplate.exchange(url+param, HttpMethod.POST, null, ReCapchaResponse.class).getBody();
-		if(result.hasErrors()) {
-			model.addAttribute("messageRegister", "Some fields are not valid. Please fix them!");
-			return "user/register";
-		}
-		else {
-			if(reCaptchaResponse.isSuccess()) {
-					
-					
-					sessionService.set("accResgister", null);
-					long currentTimeMillis = System.currentTimeMillis();
-			        System.out.println("Current Time in Milliseconds: " + currentTimeMillis);
-			        if(acc.getPassword().equals(confirmPass)) {
-			        	acc.setId(currentTimeMillis);
-			        	acc.setPassword(confirmPass);
-			        	
-			        	Set<Role> roles = new HashSet<>();
-		                roles.add(new Role(RoleUserEnum.USER));
-		                acc.setRoles(roles);
-			        	sessionService.set("accResgister", acc);
-			        	System.out.println(acc);
-			        	String code = mailer.send(acc.getEmail(), "Confirm Register", "Your 6 digits are ");
-			        	sessionService.set("codeRegister", code);
-			        	return "user/confirmRegister";	
-			        }else {
-			        	model.addAttribute("messageRegister","Confirm Password not match");
-			        	return "user/register";
-			        }
-			        	
-			}else {
-				model.addAttribute("messageRegister","captcha not successfully");
+	@RequestMapping(value = "/user/register", method = RequestMethod.POST)
+	public String registerUser(@RequestParam("confirmPass") String confirmPass, @RequestParam("g-recaptcha-response") String captchaResponse,Model model,@Valid @ModelAttribute("account") Account account,
+			BindingResult result) throws MessagingException,ServletException, IOException{
+			String url = "https://www.google.com/recaptcha/api/siteverify";
+			String param = "?secret=6LeLiE8pAAAAAN7_WEtfdxzUynvA1dR_dijzuYEd&response=" + captchaResponse;
+			ReCapchaResponse reCaptchaResponse = restTemplate.exchange(url+param, HttpMethod.POST, null, ReCapchaResponse.class).getBody();
+			Account existingAccount = dao.findByEmailIgnoreCase(account.getEmail());
+			if(result.hasErrors()) {
+				model.addAttribute("messageRegisterFail", "Some fields are not valid. Please fix them!");
 				return "user/register";
-			}		
-		}
-		
+			}else {
+				if(reCaptchaResponse.isSuccess()) {
+					if(existingAccount != null) {
+						model.addAttribute("messageRegisterFail","This email already exists!");
+					}else {
+						sessionService.set("accResgister", null);
+						long currentTimeMillis = System.currentTimeMillis();
+						System.out.println("Current Time in Milliseconds: " + currentTimeMillis);
+						if(account.getPassword().equals(confirmPass)) {
+				        	account.setId(currentTimeMillis);
+				        	account.setPassword(PASSWORD_ENCODER.encode(confirmPass));
+				        	
+				        	Set<Role> roles = new HashSet<>();
+			                roles.add(new Role(RoleUserEnum.USER));
+			                account.setRoles(roles);
+			                account.setEnabled(false);
+				        	sessionService.set("accResgister", account);
+				        	System.out.println(account);
+				        	dao.save(account);
+				        	ConfirmationToken confirmationToken = new ConfirmationToken(account);
+				        	confirmationTokenDao.save(confirmationToken);
+							SimpleMailMessage mailMessage = new SimpleMailMessage();
+				            mailMessage.setTo(account.getEmail());
+				            mailMessage.setSubject("Complete Registration!");
+				            mailMessage.setText("To confirm your account, please click here : "
+				            +"http://localhost:8080/user/confirmRegister?token="+confirmationToken.getConfirmationToken());
+				            mailer.sendEmail(mailMessage);
+				            model.addAttribute("messageRegisterSuccess","successfulRegisteration");
+				            return "user/register";
+				        }else {
+				        	model.addAttribute("messageRegisterFail","Confirm Password not match");
+				        	return "user/register";
+				        }
+						
+						
+					}
+					
+			        
+				}else {
+					model.addAttribute("messageRegisterFail","captcha not successfully");
+					return "user/register";
+				}
+			}
+			
+	        return "user/register";
 	}
 	
-	@RequestMapping("/user/confirmRegister")
-	public String confirmRegister(Model model,@RequestParam("codeRegister") String code) {
-		System.out.println(sessionService.get("codeRegister").toString());
-		Account acc = sessionService.get("accResgister");
-		System.out.println(acc.getLastname());
-		model.addAttribute("messageCodeRegister",null);
-		if(code.equals(sessionService.get("codeRegister"))) {
-		
-			acc.setPassword(PASSWORD_ENCODER.encode(acc.getPassword()));
-			
-			System.out.println(acc);
-			dao.save(sessionService.get("accResgister"));
-			model.addAttribute("messageCodeRegisterSuccess","Create account successfully");
-			return "user/confirmRegister";	
-		}else {
-			model.addAttribute("messageCodeRegisterFail","Wrong code, re confirm 6 digits please");
-			return "user/confirmRegister";	
-		}
-	}
+	@RequestMapping(value="/user/confirmRegister", method= {RequestMethod.GET, RequestMethod.POST})
+    public String confirmUserAccount(Model model, @RequestParam("token") String confirmationToken)
+    {
+        ConfirmationToken token = confirmationTokenDao.findByConfirmationToken(confirmationToken);
+        System.out.println(token);
+        if(token != null)
+        {
+        	Account account = dao.findByEmailIgnoreCase(token.getAccount().getEmail());
+        	account.setEnabled(true);
+            dao.save(account);
+            model.addAttribute("messageCodeRegisterSuccess","accountVerified");
+            return "user/confirmRegister";
+        }
+        else
+        {
+        	model.addAttribute("messageCodeRegisterFail","The link is invalid or broken!");
+ 
+        	return "user/confirmRegister";
+        }
+    }
+
+	
+//	@RequestMapping("/user/signup")
+//	public String signup(@RequestParam("confirmPass") String confirmPass,
+//			@RequestParam("g-recaptcha-response") String captchaResponse,Model model,@Valid @ModelAttribute("account") Account acc,BindingResult result) throws MessagingException,ServletException, IOException{
+//		model.addAttribute("messageRegister",null);
+//		sessionService.set("accResgister", null);
+//		sessionService.set("codeRegister", null);
+//		String url = "https://www.google.com/recaptcha/api/siteverify";
+//		String param = "?secret=6LeLiE8pAAAAAN7_WEtfdxzUynvA1dR_dijzuYEd&response=" + captchaResponse;	
+//		ReCapchaResponse reCaptchaResponse = restTemplate.exchange(url+param, HttpMethod.POST, null, ReCapchaResponse.class).getBody();
+//		if(result.hasErrors()) {
+//			model.addAttribute("messageRegister", "Some fields are not valid. Please fix them!");
+//			return "user/register";
+//		}
+//		else {
+//			if(reCaptchaResponse.isSuccess()) {
+//					
+//					
+//					sessionService.set("accResgister", null);
+//					long currentTimeMillis = System.currentTimeMillis();
+//			        System.out.println("Current Time in Milliseconds: " + currentTimeMillis);
+//			        if(acc.getPassword().equals(confirmPass)) {
+//			        	acc.setId(currentTimeMillis);
+//			        	acc.setPassword(confirmPass);
+//			        	
+//			        	Set<Role> roles = new HashSet<>();
+//		                roles.add(new Role(RoleUserEnum.USER));
+//		                acc.setRoles(roles);
+//			        	sessionService.set("accResgister", acc);
+//			        	System.out.println(acc);
+//			        	String code = mailer.send(acc.getEmail(), "Confirm Register", "Your 6 digits are ");
+//			        	sessionService.set("codeRegister", code);
+//			        	return "user/confirmRegister";	
+//			        }else {
+//			        	model.addAttribute("messageRegister","Confirm Password not match");
+//			        	return "user/register";
+//			        }
+//			        	
+//			}else {
+//				model.addAttribute("messageRegister","captcha not successfully");
+//				return "user/register";
+//			}		
+//		}
+//		
+//	}
+	
+//	@RequestMapping("/user/confirmRegister")
+//	public String confirmRegister(Model model,@RequestParam("codeRegister") String code) {
+//		System.out.println(sessionService.get("codeRegister").toString());
+//		Account acc = sessionService.get("accResgister");
+//		System.out.println(acc.getLastname());
+//		model.addAttribute("messageCodeRegister",null);
+//		if(code.equals(sessionService.get("codeRegister"))) {
+//		
+//			acc.setPassword(PASSWORD_ENCODER.encode(acc.getPassword()));
+//			
+//			System.out.println(acc);
+//			dao.save(sessionService.get("accResgister"));
+//			model.addAttribute("messageCodeRegisterSuccess","Create account successfully");
+//			return "user/confirmRegister";	
+//		}else {
+//			model.addAttribute("messageCodeRegisterFail","Wrong code, re confirm 6 digits please");
+//			return "user/confirmRegister";	
+//		}
+//	}
 	
 	@RequestMapping("user/signin")
 	public String signin(@RequestParam("username") String username, @RequestParam("password") String password,

@@ -93,7 +93,11 @@ public class Account implements Serializable{
     @JsonIgnore
     @OneToOne(mappedBy="account",fetch=FetchType.EAGER)
     Wallet wallet;
- 
+    @JsonIgnore
+    @OneToOne(mappedBy="account",fetch=FetchType.EAGER)
+    ConfirmationToken confirmationToken;
+    private boolean isEnabled;
+    
     public Provider getProvider() {
         return provider;
     }
@@ -106,7 +110,7 @@ public class Account implements Serializable{
         return this.roles.stream().map(r -> r.getName()).collect(Collectors.joining(", "));
       }
     
-    public Account(long id, String username, String password, String firstname, String lastname, String email, int phone, String gender) {
+    public Account(long id, String username, String password, String firstname, String lastname, String email, int phone, String gender,boolean isEnabled) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -117,11 +121,12 @@ public class Account implements Serializable{
         this.gender = gender;
         this.roles = new HashSet<>();
         this.roles.add(new Role(RoleUserEnum.USER));
+        this.isEnabled = isEnabled;
     }
     
     @Override
     public String toString() {
-        return "Account(id=" + id + ", username=" + username + ", firstname=" + firstname + ", lastname=" + lastname + ", email=" + email + ", phone=" + phone + ", gender=" + gender + ")";
+        return "Account(id=" + id + ", username=" + username + ", firstname=" + firstname + ", lastname=" + lastname + ", email=" + email + ", phone=" + phone + ", gender=" + gender + ", isEnabled=" + isEnabled +")";
     }
 
 }
