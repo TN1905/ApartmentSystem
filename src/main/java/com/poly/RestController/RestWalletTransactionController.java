@@ -36,10 +36,10 @@ public class RestWalletTransactionController {
 	}
 	
 	@GetMapping("/rest/wallettransaction/{id}")
-	public ResponseEntity<WalletTransaction> getOne(@PathVariable("id") Long id) {
+	public ResponseEntity<List<WalletTransaction>> getOne(@PathVariable("id") Long id) {
 		try {
-			WalletTransaction walletTransaction = walletTransactionDao.findById(id).get();
-			return ResponseEntity.ok(walletTransaction);
+			List<WalletTransaction> list = walletTransactionDao.findTransactionByWallet(id);
+			return ResponseEntity.ok(list);
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
 		}

@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.poly.utils._enum.RoleUserEnum;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -48,23 +49,15 @@ import lombok.Setter;
 public class Account implements Serializable{
 	@Id
 	private long id;
-	@NotBlank(message = "Vui lòng không được để trống")
 	private String username;
-	@Pattern(regexp="^(?=.*[a-z])(?=.*[A-Z]).{6,}$", message = "Yêu cầu ít nhất 6 kí tự và 1 chữ hoa, 1 chữ thường")
 	private String password;
 	@Column(columnDefinition = "NVARCHAR(MAX)")
-	@NotBlank(message = "Vui lòng không được để trống")
 	private String firstname;
 	@Column(columnDefinition = "NVARCHAR(MAX)")
-	@NotBlank(message = "Vui lòng không được để trống")
 	private String lastname;
-	@NotBlank(message = "Vui lòng không được để trống")
-	@Email(message = "Sai định dạng email")
 	private String email;
-	@NotNull(message = "Vui lòng không được để trống")
-	private int phone;
+	private String phone;
 	@Column(columnDefinition = "NVARCHAR(MAX)")
-	@NotNull(message = "Vui lòng không được để trống")
 	private String gender;
 	@Builder.Default
 	@ManyToMany(fetch = FetchType.EAGER)
@@ -89,6 +82,9 @@ public class Account implements Serializable{
 	List<RentApartment> rentApartment;
     @Enumerated(EnumType.STRING)
     private Provider provider;
+    @JsonIgnore
+    @OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
+    private List<FavoriteApartment> favoriteApartments;
     
     @JsonIgnore
     @OneToOne(mappedBy="account",fetch=FetchType.EAGER)
@@ -96,6 +92,12 @@ public class Account implements Serializable{
     @JsonIgnore
     @OneToOne(mappedBy="account",fetch=FetchType.EAGER)
     ConfirmationToken confirmationToken;
+    @JsonIgnore
+    @OneToOne(mappedBy="account",fetch=FetchType.EAGER)
+    AccountSession accountSession;
+    @JsonIgnore
+    @OneToMany(mappedBy="account", fetch = FetchType.EAGER)
+	List<Apartment> apartment;
     private boolean isEnabled;
     
     public Provider getProvider() {
@@ -110,7 +112,7 @@ public class Account implements Serializable{
         return this.roles.stream().map(r -> r.getName()).collect(Collectors.joining(", "));
       }
     
-    public Account(long id, String username, String password, String firstname, String lastname, String email, int phone, String gender,boolean isEnabled) {
+    public Account(long id, String username, String password, String firstname, String lastname, String email, String phone, String gender,boolean isEnabled) {
         this.id = id;
         this.username = username;
         this.password = password;

@@ -10,6 +10,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -57,13 +58,17 @@ public class Apartment implements Serializable{
     private String description;
 	@ManyToOne @JoinColumn(name="apartmentTypeId")
 	ApartType apartmentType;
+	@ManyToOne @JoinColumn(name="accountId")
+	Account account;
 	@JsonIgnore
 	@OneToMany(mappedBy = "apartment")
 	List<RentApartmentDetail> rentApartmentDetail;@JsonIgnore
     @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL)
     private List<ApartmentImage> images;
 	private String status;
-	
+	@JsonIgnore
+    @OneToMany(mappedBy = "apartment", cascade = CascadeType.ALL)
+    private List<FavoriteApartment> favoriteApartments;
 	public void setImages(List<ApartmentImage> images) {
 	    this.images = images;
 	}

@@ -42,6 +42,17 @@ public class RestApartmentController {
 		return dao.findById(id).get();
 	}
 	
+	@GetMapping("/rest/apartmentAccountId/{accountId}")
+	public ResponseEntity<List<Apartment>> getListApartmentById(@PathVariable("accountId") Long id) {
+		 try {
+			 	List<Apartment> list = dao.getListApartmentById(id);
+
+	            return ResponseEntity.ok(list);
+	        } catch (Exception e) {
+	            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+	        }
+	}
+	
 	@PostMapping("/rest/apartments")
 	public Apartment post(@RequestBody Apartment apartment) {
 		dao.save(apartment);

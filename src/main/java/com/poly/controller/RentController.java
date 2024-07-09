@@ -128,6 +128,10 @@ public class RentController {
         return "user/paymentsuccessForm";
 	}
 	
+	
+	
+	//http://localhost:3000/transaction
+	
 	@RequestMapping("/user/paymentsuccessMOMO")
 	public String paymentsuccessMomo(Model model) {
 		String partnerCode = req.getParameter("partnerCode");

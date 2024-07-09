@@ -52,7 +52,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler{
         	  acc.setFirstname("none");
         	  acc.setLastname("none"); 
         	  acc.setPassword(PASSWORD_ENCODER.encode("Yummy12"));
-        	  acc.setPhone(0);
+        	  acc.setPhone("");
         	  acc.setGender("other");
         	  acc.setEmail(username);
 
@@ -74,7 +74,7 @@ public class CustomSuccessHandler implements AuthenticationSuccessHandler{
 	        	  acc.setFirstname("none");
 	        	  acc.setLastname("none"); 
 	        	  acc.setPassword(PASSWORD_ENCODER.encode("Yummy12"));
-	        	  acc.setPhone(0);
+	        	  acc.setPhone("");
 	        	  acc.setGender("other");
 	        	  acc.setEmail(username);
 	        	  Set<Role> roles = new HashSet<>();

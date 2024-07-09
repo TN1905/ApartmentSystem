@@ -1,6 +1,10 @@
 package com.poly.entity;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,18 +28,18 @@ import lombok.Setter;
 @Entity
 @SuppressWarnings("serial")
 @Table(name="WalletTransaction")
-public class WalletTransaction {
+public class WalletTransaction implements Serializable{
 	@Id
 	private long id;
 	private String receiver;
 	private double amount;
 	private String receiver_payment_number;
-	@Temporal(TemporalType.DATE)
-	@Column(name = "createdate")
-	private Date createdate = new Date();
+	private String txig;
+	@Temporal(TemporalType.TIMESTAMP)
+	private LocalDateTime localDateTime;
+	@JsonBackReference
 	@ManyToOne @JoinColumn(name="walletId")
 	private Wallet wallet;
-	@ManyToOne @JoinColumn(name="paymentInfoId")
-	private PaymentInfo paymentInfo;
+	private String transactionType;
 	
 }

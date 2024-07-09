@@ -29,8 +29,7 @@ import lombok.Setter;
 @Table(name = "ApartmentImage")
 public class ApartmentImage implements Serializable {
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private String id;
 
 	@Column(name = "image_data", columnDefinition = "VARCHAR(MAX)")
 	private String imageData;

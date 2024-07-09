@@ -3,6 +3,8 @@ package com.poly.RestController;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.poly.dao.AccountDAO;
 import com.poly.dao.RentApartmentDAO;
 import com.poly.entity.Account;
+import com.poly.entity.ApartmentImage;
 import com.poly.entity.RentApartment;
 
 @CrossOrigin("*")
@@ -32,6 +35,16 @@ public class RestRentApartmentController {
 	@GetMapping("/rest/rentapartments/{id}")
 	public RentApartment getOne(@PathVariable("id") Long id) {
 		return dao.findById(id).get();
+	}
+	
+	@GetMapping("/rest/rentapartment/{id}")
+	public ResponseEntity<List<RentApartment>> getListRentApartment(@PathVariable("id") String id) {
+		try {
+			List<RentApartment> list = dao.findByRentApartment(id);
+			return ResponseEntity.ok(list);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 	
 	@PostMapping("/rest/rentapartments")

@@ -39,6 +39,8 @@ public class RentApartment implements Serializable {
     @Column(name = "endate")
     private LocalDateTime enddate;
     
+    private String status;
+    
     private int monthrent;
     @ManyToOne
     @JoinColumn(name = "accountId")
