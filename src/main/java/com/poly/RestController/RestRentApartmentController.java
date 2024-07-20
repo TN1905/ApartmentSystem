@@ -20,6 +20,7 @@ import com.poly.dao.RentApartmentDAO;
 import com.poly.entity.Account;
 import com.poly.entity.ApartmentImage;
 import com.poly.entity.RentApartment;
+import com.poly.entity.Wallet;
 
 @CrossOrigin("*")
 @RestController
@@ -32,9 +33,14 @@ public class RestRentApartmentController {
 		return dao.findAll();
 	}
 	
-	@GetMapping("/rest/rentapartments/{id}")
-	public RentApartment getOne(@PathVariable("id") Long id) {
-		return dao.findById(id).get();
+	@GetMapping("/rest/getrentedbyacc/{id}")
+	public ResponseEntity<List<RentApartment>> getRentedByAccount(@PathVariable("id") Long id) {
+		try {
+			List<RentApartment> list = dao.findRentedByAccount(id);
+			return ResponseEntity.ok(list);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
 	}
 	
 	@GetMapping("/rest/rentapartment/{id}")
@@ -48,9 +54,14 @@ public class RestRentApartmentController {
 	}
 	
 	@PostMapping("/rest/rentapartments")
-	public RentApartment post(@RequestBody RentApartment rentApartment) {
-		dao.save(rentApartment);
-		return rentApartment;
+	public ResponseEntity<RentApartment> post(@RequestBody RentApartment rent) {
+		try {
+			RentApartment rentapartment = dao.save(rent);
+			return ResponseEntity.ok(rentapartment);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+
 	}
 	
 	@PutMapping("/rest/rentapartments/{id}")

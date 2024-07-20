@@ -28,4 +28,6 @@ public interface MailerService {
 	String send(String to, String subject, String body) throws MessagingException;
 	void queue(MailInfo mail);
 	void queue(String to, String subject, String body);
+	// gửi email kèm file pdf hợp đồng
+		void sendContractEmail(String to, String pdfPath) throws MessagingException;
 }

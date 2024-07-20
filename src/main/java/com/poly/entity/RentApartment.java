@@ -49,6 +49,8 @@ public class RentApartment implements Serializable {
     @ManyToOne
     @JoinColumn(name = "apartmentId")
     private Apartment apartment;
+    @Column(name = "alert_expire", nullable = true)
+    private Boolean alertExpire = false;
     
     
 }

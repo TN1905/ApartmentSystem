@@ -7,7 +7,7 @@ public class _enum {
 	public enum RoleUserEnum {
 	    ADMIN(1),
 	    USER(2),
-	    MOD(3);
+	    POSTER(3);
 
 	    private final int value;
 

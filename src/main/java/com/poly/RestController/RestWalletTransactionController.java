@@ -45,6 +45,76 @@ public class RestWalletTransactionController {
 		}
 	}
 	
+	@GetMapping("/rest/totalrented")
+	public ResponseEntity<Double> getTotalPriceRented() {
+		try {
+			Double d = walletTransactionDao.sumTransactionRented();
+			return ResponseEntity.ok(d);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
+	@GetMapping("/rest/totalcommission")
+	public ResponseEntity<Double> getTotalCommissionRented() {
+		try {
+			Double d = walletTransactionDao.sumTransactionCommission();
+			return ResponseEntity.ok(d);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
+	@GetMapping("/rest/totalusersrented")
+	public ResponseEntity<Integer> getTotalUserRented() {
+		try {
+			int d = walletTransactionDao.countUserRented();
+			return ResponseEntity.ok(d);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
+	@GetMapping("/rest/pricerentedbymonth/{month}")
+	public ResponseEntity<Double> priceRentedByMonth(@PathVariable("month") Integer month) {
+		try {
+			Double d = walletTransactionDao.getPriceRentedByMonth(month);
+			return ResponseEntity.ok(d);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
+	@GetMapping("/rest/pricecommissionbymonth/{month}")
+	public ResponseEntity<Double> priceCommissionByMonth(@PathVariable("month") Integer month) {
+		try {
+			Double d = walletTransactionDao.getPriceCommissionByMonth(month);
+			return ResponseEntity.ok(d);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
+	@GetMapping("/rest/pricedepositebymonth/{month}")
+	public ResponseEntity<Double> priceDepositeByMonth(@PathVariable("month") Integer month) {
+		try {
+			Double d = walletTransactionDao.getPriceDepositeByMonth(month);
+			return ResponseEntity.ok(d);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
+	@GetMapping("/rest/pricewithdrawbymonth/{month}")
+	public ResponseEntity<Double> priceWithdrawByMonth(@PathVariable("month") Integer month) {
+		try {
+			Double d = walletTransactionDao.getPriceWithdrawByMonth(month);
+			return ResponseEntity.ok(d);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
 	@PostMapping("/rest/wallettransaction")
 	public ResponseEntity<WalletTransaction> post(@RequestBody WalletTransaction walletTransaction) {
 		try {

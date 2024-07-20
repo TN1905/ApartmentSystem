@@ -143,8 +143,43 @@ public class RestAccountController {
 		}
 	}
 	
+	@PutMapping("/rest/addRole/{id}")
+	public ResponseEntity<Account> addRole(@PathVariable("id") Long id,@RequestBody Account account) {
+		try {
+			Account acc = dao.findById(id).get();
+			if(acc!= null) {
+				Set<Role> roles = new HashSet<>();
+	            roles.add(new Role(RoleUserEnum.USER));
+	            roles.add(new Role(RoleUserEnum.POSTER));
+	            acc.setRoles(roles);
+				acc = dao.save(acc);
+			}
+			return ResponseEntity.ok(acc);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
 	@PutMapping("/rest/accounts/{id}")
-	public Account put(@PathVariable("id") Long id,@RequestBody Account account) {
+	public ResponseEntity<Account> put(@PathVariable("id") Long id,@RequestBody Account account) {
+		try {
+			Account acc = dao.findById(id).get();
+			if(acc!= null) {
+				acc.setFirstname(account.getFirstname());
+				acc.setLastname(account.getLastname());
+				acc.setPhone(account.getPhone());
+				acc.setGender(account.getGender());
+				acc.setEnabled(account.isEnabled());
+				acc = dao.save(acc);
+			}
+			return ResponseEntity.ok(acc);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+	
+	@PutMapping("/rest/updateAccount/{id}")
+	public Account updateAccount(@PathVariable("id") Long id,@RequestBody Account account) {
 		dao.save(account);
 		return account;
 	}

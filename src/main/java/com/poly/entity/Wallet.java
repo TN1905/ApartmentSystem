@@ -47,7 +47,7 @@ public class Wallet implements Serializable{
 	@OneToMany(mappedBy = "wallet")
 	List<WalletTransaction> walletTransaction;
 	@JsonManagedReference
-    @OneToMany(mappedBy = "wallet", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "wallet")
     private List<PaymentInfo> paymentInfo;
 	
 	public Boolean checkPassword(String password) {

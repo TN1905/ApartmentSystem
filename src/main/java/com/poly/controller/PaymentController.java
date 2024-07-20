@@ -58,9 +58,7 @@ public class PaymentController {
 	
 	@PostMapping("/rest/create_payment_vnpay")
 	public ResponseEntity<Map<String, String>> create_payment_method(@RequestParam("walletId") Long walletId
-			, @RequestParam("amount") double amount,@RequestParam("month") int month
-			, @RequestBody RentApartment rentApartment) throws UnsupportedEncodingException{
-		RentApartment rent = rentApartmentDao.save(rentApartment);
+			, @RequestParam("amount") double amount,@RequestParam("month") int month) throws UnsupportedEncodingException{
 		long amountDeposite = Math.round(amount * 100);
         String vnp_TxnRef = Config.getRandomNumber(8);
         String vnp_IpAddr = "127.0.0.1";
@@ -80,7 +78,7 @@ public class PaymentController {
         vnp_Params.put("vnp_OrderType", Config.orderType);
 
 
-       vnp_Params.put("vnp_ReturnUrl", Config.deposite_vnp_ReturnUrl);
+       vnp_Params.put("vnp_ReturnUrl", Config.vnp_ReturnUrl);
         vnp_Params.put("vnp_IpAddr", vnp_IpAddr);
 
         Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
@@ -137,6 +135,7 @@ public class PaymentController {
 	@GetMapping("/user/create_payment_momo")
 	 public  String createMoMoOrder() throws Exception{
 		LogUtils.init();
+		
 		Apartment apartment = sessionService.get("apartmentPayment");
 		String requestId = String.valueOf(System.currentTimeMillis());
       String orderId = String.valueOf(System.currentTimeMillis());
@@ -165,25 +164,25 @@ public class PaymentController {
       Environment environment = Environment.selectEnv("dev");
       PaymentResponse captureWalletMoMoResponse = CreateOrderMoMo.process(environment, orderId, requestId, Long.toString(1000000), orderInfo, returnURL, notifyURL, "", RequestType.PAY_WITH_ATM, null);
       System.out.println(captureWalletMoMoResponse.getPayUrl());
+      
       return captureWalletMoMoResponse.getPayUrl();
   }
 	
 	@PostMapping("/rest/create_payment_momo")
 	public ResponseEntity<Map<String, String>> create_payment_momo(@RequestParam("walletId") Long walletId
-			, @RequestParam("amount") double amount,@RequestParam("month") int month
-			, @RequestBody RentApartment rentApartment) throws Exception {
+			, @RequestParam("amount") double amount,@RequestParam("month") int month) throws Exception {
 	    LogUtils.init();
-	    RentApartment apartRent = rentApartmentDao.save(rentApartment);
 	    String requestId = String.valueOf(System.currentTimeMillis());
 	    String orderId = String.valueOf(System.currentTimeMillis());
 	    String partnerClientId = "partnerClientId";
 	    long amountDeposite = Math.round(amount);
 	    String orderInfo = "Pay With MoMo";
-	    String returnURL = "http://localhost:3000/transaction";
+	    String returnURL = "http://localhost:3000/rentedapartment";
 	    String notifyURL = "https://google.com.vn";
 	    Environment environment = Environment.selectEnv("dev");
 	    PaymentResponse captureWalletMoMoResponse = CreateOrderMoMo.process(environment, orderId, requestId, Long.toString(amountDeposite), orderInfo, returnURL, notifyURL, "", RequestType.PAY_WITH_ATM, null);
 	    Map<String, String> response = new HashMap<>();
+	    LogUtils.debug(captureWalletMoMoResponse);
 	    response.put("status", "OK");
 	    response.put("message", "Successfully");
 	    response.put("URL", captureWalletMoMoResponse.getPayUrl());
