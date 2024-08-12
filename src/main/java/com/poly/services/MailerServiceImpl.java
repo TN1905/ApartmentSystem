@@ -157,7 +157,7 @@ public class MailerServiceImpl implements MailerService{
 		RentApartmentDAO reportDao;
 		
 		
-		@Scheduled(cron = "0 44 22 * * ?")
+		@Scheduled(cron = "0 09 18 * * ?")
 		public void checkAndSendExpiryNotifications() {
 			LocalDateTime currentDate = LocalDateTime.now();
 			LocalDateTime startDate = currentDate.plusDays(1);
